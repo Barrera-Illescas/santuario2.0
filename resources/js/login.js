@@ -8,6 +8,8 @@ import router from './router';
 import { es } from 'vuetify/locale';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap';
+import axios from 'axios';
+
 // import Navbar from './web/publics/Navbar.vue';
 
 // import vuetify from './plugins/vuetify';
