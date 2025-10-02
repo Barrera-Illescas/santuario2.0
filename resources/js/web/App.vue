@@ -1,6 +1,11 @@
 <template>
     <div>
         <Navbar></Navbar>
+        <Portafolio></Portafolio>
+        <Historia></Historia>
+        <Ubicacion></Ubicacion>
+        <Colaboraciones></Colaboraciones>
+        <Denuncias></Denuncias>
         <router-view></router-view>
     </div>
 </template>
