@@ -10,7 +10,7 @@
         "@popperjs/core": "^2.11.8",
         "@tailwindcss/vite": "^4.0.0",
         "@vitejs/plugin-vue": "^6.0.1",
-        "axios": "^1.11.0",
+        "axios": "^1.12.2",
         "bootstrap": "^5.3.8",
         "concurrently": "^9.0.1",
         "laravel-vite-plugin": "^2.0.1",
@@ -22,6 +22,7 @@
     },
     "dependencies": {
         "@fontsource/pacifico": "^5.2.7",
+        "sweetalert2": "^11.23.0",
         "vue": "^3.5.22",
         "vuetify": "^3.10.3"
     }
