@@ -75,30 +75,39 @@ export default {
     methods: {
         async handleLogin() {
             this.overlay = true;
+            this.error = null;
 
-            // Simulación de autenticación
-            setTimeout(() => {
-                this.overlay = false;
-                axios.post('/login', {
-                    userName: this.user,
+            try {
+                await axios.post('/login', {
+                    email: this.user,
                     password: this.password,
-                })
-                if (this.user === 'colaborador@example.com' && this.password === 'secreto') {
-                    Swal.fire({
-                        title: 'Bienvenido',
-                        text: 'Gracias por alzar la voz por los animales.',
-                        icon: 'success',
-                        confirmButtonText: 'Continuar',
-                    });
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Credenciales incorrectas.',
-                        text: 'Por favor, intentelo de nuevo'
-                    })
-                }
-            }, 1000);
+                }, {
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    }
+                });
+
+                // Login exitoso
+                this.overlay = false;
+                Swal.fire({
+                    title: 'Bienvenido',
+                    text: 'Gracias por alzar la voz por los animales.',
+                    icon: 'success',
+                    confirmButtonText: 'Continuar',
+                }).then(() => {
+                    window.location.href = '/dashboard';
+                });
+
+            } catch (error) {
+                this.overlay = false;
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Credenciales incorrectas',
+                    text: 'Por favor, inténtelo de nuevo'
+                });
+            }
         }
+
     }
 }
 </script>
