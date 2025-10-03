@@ -26,6 +26,7 @@
 
     </div>
      @vite('resources/js/app.js')
+     @vite('resources/js/app1.js')
     <!-- Masthead-->
     
 
