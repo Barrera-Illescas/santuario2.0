@@ -61,7 +61,6 @@
 </template>
 
 <script>
-import { use } from 'react';
 import Swal from 'sweetalert2';
 
 export default {
