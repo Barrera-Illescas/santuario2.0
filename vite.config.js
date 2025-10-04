@@ -11,6 +11,7 @@ export default defineConfig({
                 'resources/css/app.css',
                 'resources/js/app.js',
                 'resources/js/app1.js',
+                'resources/js/usuario.js',
                 'resources/sass/app.scss',
                 'resources/css/styles.css',
                 'resources/css/app.css',
