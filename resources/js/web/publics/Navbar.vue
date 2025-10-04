@@ -21,11 +21,11 @@
             </div>
         </div>
     </nav>
-    <header class="masthead">
+    <header class="masthead" id="page-top">
         <div class="container">
             <div class="masthead-subheading">¡Un refugio de esperanza y amor!</div>
             <div class="masthead-heading text-uppercase">Bienvenido al Santuario Los Fernandos</div>
-            <a class="btn btn-primary btn-xl text-uppercase" href="#services">Conócenos</a>
+            <a class="btn btn-primary btn-xl text-uppercase" href="#nosotros">Conócenos</a>
         </div>
     </header>
 

@@ -109,7 +109,7 @@
         .page-content {
             flex-grow: 1;
             background-color: #ffffff;
-            padding: 40px 10px;
+            padding: 10px 10px;
         }
 
         .header {
@@ -125,8 +125,8 @@
             background-color: #0d6efd;
             color: white;
             border: none;
-            padding: 8px 12px;
-            border-radius: 6px;
+            padding: 4px 8px;
+            border-radius: 50%;
             cursor: pointer;
         }
 
@@ -159,7 +159,7 @@
                         <span class="user-status"><i class="fa fa-circle"></i> Online</span>
                     </div>
                 </div>
-
+                <hr />
                 <div class="sidebar-menu">
                     <ul id="menu-items">
                         <li><a href="#" onclick="selectComponent('Animales', this)"><i class="fa fa-paw"></i>
@@ -182,7 +182,7 @@
         <!-- Main content -->
         <main class="page-content">
             <div class="header">
-                <h4 class="m-0">Panel Administrativo</h4>
+                <h4 class="m-0" id="panel-title">Panel Administrativo</h4>
                 <button class="toggle-btn" onclick="toggleSidebar()" id="headerToggle" style="display: none;">
                     <i class="fas fa-bars"></i>
                 </button>
@@ -223,6 +223,12 @@
             // Agregar clase activa al enlace seleccionado
             if (element) {
                 element.classList.add('active');
+            }
+
+            // Cambiar el título del panel
+            const title = document.getElementById('panel-title');
+            if (title) {
+                title.textContent = name;
             }
         }
     </script>
