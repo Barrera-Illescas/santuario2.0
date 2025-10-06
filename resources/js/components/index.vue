@@ -7,6 +7,10 @@
 <script>
 import Animales from './soporte/Animales.vue';
 import Capacidad from './soporte/capacidad.vue';
+import Donantes from './soporte/Donantes.vue';
+import Donaciones from './soporte/Donaciones.vue';
+import Gastos from './soporte/Gastos.vue';
+import CategoriaGastos from './soporte/CategoriaGastos.vue';
 
 export default {
   data() {
@@ -17,6 +21,10 @@ export default {
   components: {
     Animales,
     Capacidad,
+    Donantes,
+    Donaciones,
+    Gastos,
+    CategoriaGastos
   },
   mounted() {
     document.addEventListener('selectComponent', (e) => {
