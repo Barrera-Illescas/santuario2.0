@@ -13,14 +13,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Elizabeth Plato',
-            'email' => 'eli.plato@santuario.com',
-            'password' => 'santuario123',
-            'created_at' => now(),
-            'updated_at' => now(),
+        //
+        $this->call([
+            users::class,
+            especies::class,
+            metodoPago::class,
+            gastosCategorias::class,
+            categoriaPortafolio::class,
         ]);
     }
 }
