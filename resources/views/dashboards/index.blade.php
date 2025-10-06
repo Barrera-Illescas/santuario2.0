@@ -164,8 +164,17 @@
                     <ul id="menu-items">
                         <li><a href="#" onclick="selectComponent('Animales', this)"><i class="fa fa-paw"></i>
                                 Animales</a></li>
-                        <li><a href="#" onclick="selectComponent('Capacidad', this)"><i class="fa fa-users"></i>
-                                Voluntarios</a></li>
+                        <li><a href="#" onclick="selectComponent('Capacidad', this)"><i class="fa fa-map-marker" ></i>
+                                Capacidad</a></li>
+                        <li><a href="#" onclick="selectComponent('Donantes', this)"><i class="fa fa-users"></i>
+                                Donantes</a></li>
+                        <li><a href="#" onclick="selectComponent('Donaciones', this)"><i class="fa fa-gift"></i>
+                                Donaciones</a></li>
+                        <li><a href="#" onclick="selectComponent('Gastos', this)"><i class="fa fa-shopping-cart"></i>
+                                Gastos</a></li>
+                        <li><a href="#" onclick="selectComponent('Categoría-Gastos', this)"><i class="fa fa-sticky-note"></i>
+                                Categoría - Gastos</a></li>
+                        <hr />
                         <li><a href="{{ route('profile.edit') }}"><i class="fa fa-user"></i> Perfil</a></li>
                         <li>
                             <form method="POST" action="{{ route('logout') }}">
