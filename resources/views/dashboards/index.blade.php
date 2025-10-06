@@ -172,7 +172,7 @@
                                 Donaciones</a></li>
                         <li><a href="#" onclick="selectComponent('Gastos', this)"><i class="fa fa-shopping-cart"></i>
                                 Gastos</a></li>
-                        <li><a href="#" onclick="selectComponent('Categoría-Gastos', this)"><i class="fa fa-sticky-note"></i>
+                        <li><a href="#" onclick="selectComponent('CategoriaGastos', this)"><i class="fa fa-sticky-note"></i>
                                 Categoría - Gastos</a></li>
                         <hr />
                         <li><a href="{{ route('profile.edit') }}"><i class="fa fa-user"></i> Perfil</a></li>
