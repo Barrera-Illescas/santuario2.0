@@ -19,6 +19,7 @@ return new class extends Migration
             $table->unsignedBigInteger('categoria_id');
             $table->unsignedBigInteger('responsable_id');
             $table->unsignedBigInteger('usuario_id');
+            $table->integer('estado')->default(1);
             $table->timestamps();
 
             $table->foreign('categoria_id')

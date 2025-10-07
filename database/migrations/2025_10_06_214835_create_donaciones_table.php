@@ -19,6 +19,7 @@ return new class extends Migration
             $table->unsignedBigInteger('metodo_pago_id');
             $table->text('comentario')->nullable();
             $table->unsignedBigInteger('usuario_id');
+            $table->integer('estado')->default(1);
             $table->timestamps();
 
             $table->foreign('donante_id')

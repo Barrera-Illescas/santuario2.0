@@ -19,6 +19,7 @@ return new class extends Migration
             $table->unsignedBigInteger('especie_id');
             $table->unsignedBigInteger('corral_id')->nullable();
             $table->unsignedBigInteger('usuario_id');
+            $table->integer('estado')->default(1);
             $table->timestamps();
 
             $table->foreign('especie_id')

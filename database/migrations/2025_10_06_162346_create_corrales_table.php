@@ -17,6 +17,7 @@ return new class extends Migration
             $table->integer('capacidad');
             $table->string('ubicacion')->nullable();
             $table->unsignedBigInteger('especie_id');
+            $table->integer('estado')->default(1);
             $table->timestamps();
 
             $table->foreign('especie_id')
