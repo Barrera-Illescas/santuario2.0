@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('nombre');
             $table->string('correo')->nullable();
             $table->string('telefono')->nullable();
+            $table->integer('estado')->default(1);
             $table->timestamps();
         });
     }

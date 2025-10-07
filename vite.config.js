@@ -14,6 +14,7 @@ export default defineConfig({
                 'resources/js/usuario.js',
                 'resources/sass/app.scss',
                 'resources/css/styles.css',
+                'resources/css/styles2.css',
                 'resources/css/app.css',
             ],
             refresh: true,

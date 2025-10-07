@@ -20,6 +20,7 @@ return new class extends Migration
             $table->unsignedBigInteger('categoria_id');
             $table->date('fecha_publicacion')->nullable();
             $table->unsignedBigInteger('usuario_id');
+            $table->integer('estado')->default(1);
             $table->timestamps();
 
             $table->foreign('categoria_id')

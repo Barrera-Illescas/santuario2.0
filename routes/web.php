@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Soporte\SoporteController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 
@@ -41,4 +42,18 @@ Route::middleware(['auth'])->group(function () {
         $request->user()->sendEmailVerificationNotification();
         return back()->with('message', 'Verification link sent!');
     })->middleware(['throttle:6,1'])->name('verification.send');
+
+
+    /**---------------------- RUTAS ADMINISTRADOR ------------------------ */
+    Route::prefix('colaborador')->group(function () {
+
+        //RUTA PARA OBTENER LAS ESPECIES (ANIMALES)
+        Route::get('/getEspecies', [SoporteController::class, 'getEspecies']);
+        //RUTA PARA GUARDAR REGISTROS DE ESPECIES
+        Route::post('/guardarEspecie', [SoporteController::class, 'guardarEspecie']);
+        //RUTA PARA MODIFICAR REGISTROS DE ESPECIES
+        Route::post('/editarEspecie', [SoporteController::class, 'editarEspecie']);
+        //RUTA PARA ELIMINAR REGISTROS DE ESPECIES
+        Route::post('/eliminarEspecie', [SoporteController::class, 'eliminarEspecie']);
+    });
 });

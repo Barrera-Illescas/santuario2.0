@@ -3,8 +3,10 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Dashboard</title>
+    <title>Santuario | Administración</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <link href="{{ asset('css/styles.css') }}" rel="stylesheet">
+    {{-- <link href="{{ asset('css/styles2.css') }}" rel="stylesheet"> --}}
 
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">

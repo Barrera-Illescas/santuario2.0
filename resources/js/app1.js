@@ -14,6 +14,8 @@ import Historia from './web/Historia.vue';
 import Ubicacion from './web/Ubicacion.vue';
 import Colaboraciones from './web/Colaboraciones.vue';
 import Denuncias  from './web/Denuncias.vue';
+import '@mdi/font/css/materialdesignicons.css';
+
 
 // import vuetify from './plugins/vuetify';
 
