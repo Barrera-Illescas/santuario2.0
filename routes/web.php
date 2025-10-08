@@ -55,5 +55,8 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/editarEspecie', [SoporteController::class, 'editarEspecie']);
         //RUTA PARA ELIMINAR REGISTROS DE ESPECIES
         Route::post('/eliminarEspecie', [SoporteController::class, 'eliminarEspecie']);
+
+        //RUTA PARA OBTENER LOS DONANTES
+        Route::get('/getDonantes', [SoporteController::class, 'getDonantes']);
     });
 });
