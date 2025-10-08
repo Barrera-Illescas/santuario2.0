@@ -58,5 +58,25 @@ Route::middleware(['auth'])->group(function () {
 
         //RUTA PARA OBTENER LOS DONANTES
         Route::get('/getDonantes', [SoporteController::class, 'getDonantes']);
+        //RUTA PARA GUARDAR LOS DONANTES
+        Route::post('/guardarDonante', [SoporteController::class, 'guardarDonante']);
+        //RUTA PARA EDITAR LOS DONANTES
+        Route::post('/editarDonante', [SoporteController::class, 'editarDonante']);
+        //RUTA PARA ELIMINAR LOS DONANTES
+        Route::post('/eliminarDonante', [SoporteController::class, 'eliminarDonante']);
+
+        //RUTA PARA OBTENER LA CATEGORIA DE GASTOS
+        Route::get('/getCategoriaGastos', [SoporteController::class, 'getCategoriaGastos']);
+        //RUTA PARA AGREGAR CATEGORIAS DE GASTOS
+        Route::post('/guardarCatGastos', [SoporteController::class, 'guardarCatGastos']);
+        //RUTA PARA EDITAR CATEGORIAS DE GASTOS
+        Route::post('/editarCatGastos', [SoporteController::class, 'editarCatGastos']);
+        //RUTA PARA ELIMINAR CATEGORÍA DE GASTOS
+        Route::post('/eliminarCatGasto', [SoporteController::class, 'eliminarCatGasto']);
+
+        //RUTA PARA OBTENER LAS DONACIONES
+        Route::get('/getDonaciones', [SoporteController::class, 'getDonaciones']);
+        //RUTA PARA GUARDAR LAS DONACIONES
+        Route::post('/guardarDonaciones', [SoporteController::class, 'guardarDonaciones']);
     });
 });
