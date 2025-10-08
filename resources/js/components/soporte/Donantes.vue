@@ -40,7 +40,7 @@
                     <v-col class="col-6">
                         <v-tooltip>
                             <template v-slot:activator="{ props }">
-                                <v-icon size="x-large" class="mr-2" @click="eliminarEspecie(item)" color="danger"
+                                <v-icon size="x-large" class="mr-2" @click="eliminarDonante(item)" color="danger"
                                     v-bind="props">
                                     mdi mdi-trash-can
                                 </v-icon>
@@ -66,13 +66,17 @@
             <v-card-text>
                 <v-form ref="refsDonates">
                     <v-row class="mb-4 justify-center" dense>
-                        <v-col cols="12" md="10" class="justify-center">
-                            <v-text-field v-model="nombre" label="Nombre del donante" variant="outlined" rounded
+                        <v-col cols="6" md="6" class="justify-center">
+                            <v-text-field v-model="data.nombre" label="Nombre del donante" variant="outlined" rounded
                                 :rules="[...requiredRule]" />
                         </v-col>
-                        <v-col cols="12" md="10">
-                            <v-textarea v-model="descripcion" label="Correo" variant="outlined" rounded rows="4"
-                                auto-grow :rules="[...requiredRule]" />
+                        <v-col cols="6" md="6">
+                            <v-text-field v-model="data.correo" label="Correo" 
+                                variant="outlined" rounded  :rules="[...requiredRule]" />
+                        </v-col>
+                        <v-col cols="6" md="6">
+                            <v-text-field v-model="data.telefono" label="Teléfono" 
+                                variant="outlined" rounded :rules="[...requiredRule]" />
                         </v-col>
                     </v-row>
 
@@ -112,8 +116,11 @@ export default {
             dialogoDonanates: false,
             titleDialogo: '',
             idItem: null,
-            nombre: '',
-            descripcion: '',
+            data: {
+                nombre: '',
+                correo: '',
+                telefono: '',
+            },
             banderaDialogo: null,
 
             headers: [
@@ -161,8 +168,7 @@ export default {
             if (resul.valid) {
                 this.overlay = true;
                 axios.post('/colaborador/guardarDonante', {
-                    nombre: this.nombre,
-                    descripcion: this.descripcion,
+                    data: this.data,
                 }).then(res => {
                     this.overlay = false;
                     if (res.data.status === 'ok') {
@@ -187,9 +193,9 @@ export default {
         editarDonante(item) {
             this.overlay = true;
             this.idItem = item.id;
-            this.nombre = item.nombre;
-            this.correo = item.correo;
-            this.telefono = item.telefono;
+            this.data.nombre = item.nombre;
+            this.data.correo = item.correo;
+            this.data.telefono = item.telefono;
             this.titleDialogo = 'Editar Donantes';
             this.banderaDialogo = 2;
             this.dialogoDonanates = true;
@@ -203,8 +209,7 @@ export default {
                 this.overlay = true;
                 axios.post('/colaborador/editarDonante', {
                     id: this.idItem,
-                    nombre: this.nombre,
-                    descripcion: this.descripcion,
+                    data: this.data,
                 }).then(res => {
                     this.overlay = false;
                     if (res.data.status === 'ok') {
@@ -226,7 +231,7 @@ export default {
             }
         },
 
-        eliminarEspecie(item) {
+        eliminarDonante(item) {
             Swal.fire({
                 icon: 'warning',
                 text: '¿Esta seguro de eliminar el registro?',
@@ -237,7 +242,7 @@ export default {
                 if(result.isConfirmed) {
                     this.overlay = true;
 
-                    axios.post('/colaborador/eliminarEspecie', {
+                    axios.post('/colaborador/eliminarDonante', {
                         id: item.id
                     }).then(res => {
                         this.overlay = false;
