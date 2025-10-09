@@ -200,12 +200,12 @@ class SoporteController extends Controller
     {
         try {
             DB::table('gastos_categorias')
-                ->where('id', $request->id)
-                ->update([
-                    'estado' => 0,
-                    'updated_at' => $this->today->format('Y-m-d H:i:s'),
-                ]);
-
+            ->where('id', $request->id)
+            ->update([
+                'estado' => 0,
+                'updated_at' => $this->today->format('Y-m-d H:i:s'),
+            ]);
+            
             return response()->json([
                 'status' => 'ok',
             ]);
@@ -216,57 +216,101 @@ class SoporteController extends Controller
     public function getDonaciones()
     {
         $donaciones = DB::table('donaciones')
-            ->where('donaciones.estado', 1)
+        ->where('donaciones.estado', 1)
             ->join('donantes', 'donaciones.donante_id', '=', 'donantes.id')
             ->join('metodos_pagos', 'donaciones.metodo_pago_id', '=', 'metodos_pagos.id')
             ->join('users', 'donaciones.usuario_id', '=', 'users.id')
             ->select([
                 'donaciones.id',
+                'donantes.id as idDonante',
                 'donantes.nombre as nombreDonante',
                 'donaciones.monto',
                 'donaciones.fecha',
+                'metodos_pagos.id as metodoPagoId',
                 'metodos_pagos.nombre as metodoPago',
                 'donaciones.comentario',
                 'users.name as nombreUsuario',
-            ])
-            ->get();
-
-        $metodosPago = DB::table('metodos_pagos')
-            ->where('estado', 1)
-            ->get();
-
-        $donantes = $this->getDonantes();
-
-        return response()->json([
-            'donaciones' => $donaciones,
-            'donantes' => $donantes,
-            'metodosPago' => $metodosPago,
-
-        ]);
-    }
-    public function guardarDonaciones(Request $request)
-    {
-        try {
-            $user = Auth::user();
-            $fechaDonacion = Carbon::parse($request->data['fecha'])->toDateString();
-            $newDonacion = DB::table('donaciones')
-                ->insertGetId([
+                ])
+                ->get();
+                
+                $metodosPago = DB::table('metodos_pagos')
+                ->where('estado', 1)
+                ->get();
+                
+                $donantes = $this->getDonantes();
+                
+                return response()->json([
+                    'donaciones' => $donaciones,
+                    'donantes' => $donantes,
+                    'metodosPago' => $metodosPago,
+                    
+                ]);
+            }
+            public function guardarDonaciones(Request $request)
+            {
+                try {
+                    $user = Auth::user();
+                    $fechaDonacion = Carbon::parse($request->data['fecha'])->toDateString();
+                    $newDonacion = DB::table('donaciones')
+                    ->insertGetId([
+                        'donante_id' => $request->data['donante'],
+                        'monto' => $request->data['monto'],
+                        'fecha' => $fechaDonacion,
+                        'metodo_pago_id' => $request->data['metodoPago'],
+                        'comentario' => $request->data['comentario'],
+                        'usuario_id' => $user->id,
+                        'estado' => 1,
+                        'created_at' => $this->today->format('Y-m-d H:i:s'),
+                        'updated_at' => $this->today->format('Y-m-d H:i:s'),
+                    ]);
+                    return response()->json([
+                        'status' => 'ok',
+                        'newDonacion' => $newDonacion
+                    ]);
+                } catch (\Exception $e) {
+                    return 'Error al guardar donacion ' . $e;
+                }
+            }
+            public function editarDonaciones(Request $request)
+            {
+                try {
+                    $user = Auth::user();
+                    $fechaDonacion = Carbon::parse($request->data['fecha'])->toDateString();
+                    
+                    DB::table('donaciones')
+                    ->where('id', $request->id)
+                    ->update([
                     'donante_id' => $request->data['donante'],
                     'monto' => $request->data['monto'],
                     'fecha' => $fechaDonacion,
                     'metodo_pago_id' => $request->data['metodoPago'],
                     'comentario' => $request->data['comentario'],
                     'usuario_id' => $user->id,
-                    'estado' => 1,
-                    'created_at' => $this->today->format('Y-m-d H:i:s'),
                     'updated_at' => $this->today->format('Y-m-d H:i:s'),
                 ]);
-            return response()->json([
-                'status' => 'ok',
-                'newDonacion' => $newDonacion
+                
+                return response()->json([
+                    'status' => 'ok',
             ]);
         } catch (\Exception $e) {
-            return 'Error al guardar donacion ' . $e;
+            return 'Error al editar donaciones ' . $e;
+        }
+    }
+    public function eliminarDonacion(Request $request)
+    {
+        try {
+            DB::table('donaciones')
+            ->where('id', $request->id)
+            ->update([
+                'estado' => 0,
+                'updated_at' => $this->today->format('Y-m-d H:i:s'),
+            ]);
+            
+            return response()->json([
+                'status' => 'ok',
+            ]);
+        } catch (\Exception $e) {
+            return 'Error al eliminar donaciones ' . $e;
         }
     }
 }
