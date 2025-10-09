@@ -29,7 +29,7 @@
                     <v-col class="col-6">
                         <v-tooltip>
                             <template v-slot:activator="{ props }">
-                                <v-icon size="x-large" class="mr-2" @click="editarCatGastos(item)" color="success"
+                                <v-icon size="x-large" class="mr-2" @click="editarDonaciones(item)" color="success"
                                     v-bind="props">
                                     mdi mdi-pencil
                                 </v-icon>
@@ -40,7 +40,7 @@
                     <v-col class="col-6">
                         <v-tooltip>
                             <template v-slot:activator="{ props }">
-                                <v-icon size="x-large" class="mr-2" @click="eliminarCatGasto(item)" color="danger"
+                                <v-icon size="x-large" class="mr-2" @click="eliminarDonacion(item)" color="danger"
                                     v-bind="props">
                                     mdi mdi-trash-can
                                 </v-icon>
@@ -106,7 +106,7 @@
                                 <v-icon start icon="mdi-content-save" />
                                 Guardar
                             </v-btn>
-                            <v-btn v-if="banderaDialogo == 2" color="success" @click.prevent="editarSaveCatGastos()"
+                            <v-btn v-if="banderaDialogo == 2" color="success" @click.prevent="editaqrSaveDonaciones()"
                                 rounded>
                                 <v-icon start icon="mdi-content-save" />
                                 Actualizar
@@ -222,23 +222,33 @@ export default {
             }
         },
 
-        editarCatGastos(item) {
+        editarDonaciones(item) {
+            console.log('item ', item);
             this.overlay = true;
             this.idItem = item.id;
-            this.data.nombre = item.nombre;
-            this.data.descripcion = item.descripcion;
-            this.titleDialogo = 'Editar Categoría - Gastos';
+            this.data.donante = item.idDonante;
+            this.data.monto = item.monto;
+            // this.data.fecha = new Date(item.fecha);
+            const [year, month, day] = item.fecha.split('-');
+                this.data.fecha = new Date(
+                    parseInt(year),
+                    parseInt(month) - 1, // Los meses en JS van de 0 a 11
+                    parseInt(day)
+                );
+            this.data.metodoPago = item.metodoPagoId;
+            this.data.comentario = item.comentario;
+            this.titleDialogo = 'Editar Donación';
             this.banderaDialogo = 2;
             this.dialogoDonaciones = true;
             this.overlay = false;
         },
 
-        async editarSaveCatGastos() {
+        async editaqrSaveDonaciones() {
             const resul = await this.$refs.refsCatGastos.validate();
 
             if (resul.valid) {
                 this.overlay = true;
-                axios.post('/colaborador/editarCatGastos', {
+                axios.post('/colaborador/editarDonaciones', {
                     id: this.idItem,
                     data: this.data,
                 }).then(res => {
@@ -262,7 +272,7 @@ export default {
             }
         },
 
-        eliminarCatGasto(item) {
+        eliminarDonacion(item) {
             Swal.fire({
                 icon: 'warning',
                 text: '¿Esta seguro de eliminar el registro?',
@@ -273,7 +283,7 @@ export default {
                 if (result.isConfirmed) {
                     this.overlay = true;
 
-                    axios.post('/colaborador/eliminarCatGasto', {
+                    axios.post('/colaborador/eliminarDonacion', {
                         id: item.id
                     }).then(res => {
                         this.overlay = false;
@@ -301,7 +311,6 @@ export default {
             const day = String(fecha.getDate()).padStart(2, '0');
             // const [year, month, day] = fecha.split('-');
             return `${day}/${month}/${year}`;
-
         },
     },
 

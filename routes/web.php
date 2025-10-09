@@ -78,5 +78,9 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/getDonaciones', [SoporteController::class, 'getDonaciones']);
         //RUTA PARA GUARDAR LAS DONACIONES
         Route::post('/guardarDonaciones', [SoporteController::class, 'guardarDonaciones']);
+        //RUTA PARA EDITAR LAS DONACIONES
+        Route::post('/editarDonaciones', [SoporteController::class, 'editarDonaciones']);
+        //RUTA PARA ELIMINAR LAS DONACIONES
+        Route::post('/eliminarDonacion', [SoporteController::class, 'eliminarDonacion']);
     });
 });
