@@ -11,10 +11,9 @@
         <div
           v-for="(item, index) in portfolioItems"
           :key="index"
-          class="col-lg-4 col-sm-6 mb-4"
-          :class="{ 'mb-lg-0': index === 3, 'mb-sm-0': index === 4 }"
+          class="col-lg-4 col-sm-6 mb-4 d-flex"
         >
-          <div class="portfolio-item">
+          <div class="portfolio-item w-100">
             <a class="portfolio-link" @click.prevent="openModal(item)">
               <div class="portfolio-hover">
                 <div class="portfolio-hover-content">
@@ -37,23 +36,18 @@
       <div class="modal-dialog">
         <div class="modal-content" v-if="activeItem">
           <div class="close-modal" data-bs-dismiss="modal">
-            <!-- <img src="assets/img/close-icon.svg" alt="Cerrar modal" /> -->
+            <img src="/public/assets/img/close-icon.svg" alt="Cerrar modal" />
           </div>
           <div class="container">
             <div class="row justify-content-center">
               <div class="col-lg-8">
                 <div class="modal-body">
-                  <!-- Detalles del proyecto -->
                   <h2 class="text-uppercase">{{ activeItem.title }}</h2>
                   <p class="item-intro text-muted">{{ activeItem.subtitle }}</p>
                   <img class="img-fluid d-block mx-auto" :src="activeItem.image" :alt="activeItem.title" />
                   <p>
                     {{ activeItem.description || 'Esta historia representa el espíritu de nuestro santuario: compasión, esperanza y segundas oportunidades.' }}
                   </p>
-                  <ul class="list-inline">
-                    <li><strong>Cliente:</strong> Santuario Animal</li>
-                    <li><strong>Categoría:</strong> Historia de rescate</li>
-                  </ul>
                   <button class="btn btn-primary btn-xl text-uppercase" data-bs-dismiss="modal" type="button">
                     <i class="fas fa-xmark me-1"></i> Cerrar historia
                   </button>
@@ -75,34 +69,40 @@ export default {
       activeItem: null,
       portfolioItems: [
         {
-          title: 'El renacer de Luna',
-          subtitle: 'Una perrita rescatada de la calle que encontró amor, cuidados y una nueva familia en el santuario.',
-          image: 'assets/img/portfolio/1.jpg',
+          title: 'Viruta o Aserrín',
+          subtitle: 'Donaciones que ayudan a mantener limpios los dormitorios de nuestros animales.',
+          description: 'Cada semana necesitamos al menos 15 costales de viruta para evitar la mosca y mantener la higiene. ¡Tu ayuda hace la diferencia!',
+          image: 'assets/img/portfolio/viruta.jpg',
         },
         {
-          title: 'Esperanza en la tormenta',
-          subtitle: 'Durante una fuerte lluvia, voluntarios salvaron a varias aves atrapadas en el lodo, dándoles una segunda oportunidad.',
-          image: 'assets/img/portfolio/2.jpg',
+          title: 'Desayunos solidarios',
+          subtitle: 'Ven a desayunar y apoya la alimentación de más de 300 animales rescatados.',
+          description: 'Servimos desayunos todos los domingos de 8:00 a 12:00 en Granja Los Fernandos, Km. 28.5 Interamericana. ¡Tu visita alimenta vidas!',
+          image: 'assets/img/portfolio/luna.jpg',
         },
         {
-          title: 'Max vuelve a galopar',
-          subtitle: 'Un caballo maltratado que llegó débil y temeroso, hoy corre libre gracias a meses de rehabilitación y cariño.',
-          image: 'assets/img/portfolio/3.jpg',
+          title: 'Atención veterinaria',
+          subtitle: 'Ayuda urgente para cubrir la cuenta médica de Angelito.',
+          description: 'Necesitamos reunir Q1,300 para su tratamiento. Puedes donar a la cuenta 07 20 725 de Industrial a nombre de Fernando Rendón. WhatsApp: 5691-1365.',
+          image: 'assets/img/portfolio/atencionVeterinaria.jpg',
         },
         {
-          title: 'Voces que inspiran',
-          subtitle: 'Historias reales de voluntarios que transformaron su vida al cuidar y proteger animales vulnerables.',
-          image: 'assets/img/portfolio/4.jpg',
+          title: '¡Residentes felices!',
+          subtitle: 'Max y sus amigos disfrutan su nuevo espacio ampliado.',
+          description: 'Gracias a tu apoyo, nuestros residentes tienen un hogar más grande, seguro y lleno de amor.',
+          image: 'assets/img/portfolio/nuevoEspacio.jpg',
         },
         {
           title: 'La fuerza de Alma',
-          subtitle: 'Una cerdita enferma que superó las expectativas médicas y se convirtió en símbolo de resiliencia en el santuario.',
-          image: 'assets/img/portfolio/5.jpg',
+          subtitle: 'Una caballita que venció la enfermedad y nos inspira cada día.',
+          description: 'Alma llegó débil, pero con cuidados y cariño superó todo. Hoy es símbolo de esperanza en el santuario.',
+          image: 'assets/img/portfolio/caballos.jpg',
         },
         {
           title: 'Pequeños milagros',
-          subtitle: 'El nacimiento inesperado de cabritos en libertad, celebrando la vida en medio de la naturaleza protegida.',
-          image: 'assets/img/portfolio/6.jpg',
+          subtitle: 'El nacimiento de patitos en libertad nos recuerda que la vida florece donde hay paz.',
+          description: 'Cada nuevo nacimiento en el santuario es una celebración de la vida y la protección que brindamos.',
+          image: 'assets/img/portfolio/patitos.jpg',
         },
       ],
     };
@@ -121,33 +121,58 @@ export default {
 .portfolio-item {
   position: relative;
   cursor: pointer;
-}
-.portfolio-hover {
-  position: absolute;
-  top: 0;
-  left: 0;
+  display: flex;
+  flex-direction: column;
   height: 100%;
-  width: 100%;
-  opacity: 0;
-  transition: all 0.3s ease;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  transition: transform 0.3s ease;
 }
-.portfolio-item:hover .portfolio-hover {
-  opacity: 1;
+
+.portfolio-item:hover {
+  transform: translateY(-5px);
 }
-.portfolio-hover-content {
-  position: absolute;
+
+.portfolio-link {
+  flex-grow: 1;
+  display: block;
+  height: 200px;
+  overflow: hidden;
+}
+
+.portfolio-link img {
+  object-fit: cover;
   width: 100%;
   height: 100%;
+}
+
+.portfolio-caption {
+  padding: 15px;
+  min-height: 140px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   text-align: center;
-  top: 50%;
-  transform: translateY(-50%);
-  color: white;
 }
+
+.portfolio-caption-heading {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.portfolio-caption-subheading {
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+
 .portfolio-modal .modal-content {
   padding: 2rem;
   border-radius: 0.5rem;
 }
+
 .close-modal {
   position: absolute;
   right: 1rem;

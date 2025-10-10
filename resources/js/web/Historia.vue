@@ -34,49 +34,49 @@ export default {
         return {
             timeline: [
                 {
-                    image: 'assets/img/about/1.jpg',
+                    image: 'assets/img/about/ovejas.jpg',
                     inverted: false,
                     panel: {
-                        date: '2009-2011',
-                        title: 'Our Humble Beginnings',
+                        date: 'Un día cualquiera',
+                        title: 'Un encuentro inesperado',
                         description:
-                            'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt ut voluptatum eius sapiente...',
+                            'Una familia vio a un señor ciego buscando comida entre la basura, acompañado de unas ovejitas. Aunque continuaron su camino, el pesar quedó en sus corazones.',
                     },
                 },
                 {
-                    image: 'assets/img/about/2.jpg',
+                    image: 'assets/img/about/ganzo.jpg',
                     inverted: true,
                     panel: {
-                        date: 'March 2011',
-                        title: 'An Agency is Born',
+                        date: 'Pocos días después',
+                        title: 'La conversación que lo cambió todo',
                         description:
-                            'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt ut voluptatum eius sapiente...',
+                            'La familia regresó y habló con el señor, quien explicó que, debido a su ceguera, no podía alimentar adecuadamente a sus ovejitas, aunque las amaba profundamente.',
                     },
                 },
                 {
-                    image: 'assets/img/about/3.jpg',
+                    image: 'assets/img/about/tortuguita.jpg',
                     inverted: false,
                     panel: {
-                        date: 'December 2015',
-                        title: 'Transition to Full Service',
+                        date: 'La tercera visita',
+                        title: 'Un gesto de amor y confianza',
                         description:
-                            'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt ut voluptatum eius sapiente...',
+                            'Se acordó que el señor entregaría a sus ovejitas a cambio de medicamentos y un poco de dinero. Así, con respeto y gratitud, comenzó una nueva etapa para ellas.',
                     },
                 },
                 {
-                    image: 'assets/img/about/4.jpg',
+                    image: 'assets/img/about/cabra.jpg',
                     inverted: true,
                     panel: {
-                        date: 'July 2020',
-                        title: 'Phase Two Expansion',
+                        date: 'Nacimiento del santuario',
+                        title: 'Granja Los Fernandos',
                         description:
-                            'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt ut voluptatum eius sapiente...',
+                            'Ese acto de compasión fue la semilla que dio vida al santuario. Desde entonces, "Los Fernandos" ha crecido como un refugio para cientos de animales que hoy viven con dignidad.',
                     },
                 },
                 {
                     image: null,
                     inverted: true,
-                    text: 'Be Part<br />Of Our<br />Story!',
+                    text: 'Sé parte<br />de nuestra<br />historia',
                     panel: null,
                 },
             ],
@@ -84,3 +84,24 @@ export default {
     },
 };
 </script>
+<style>
+.timeline-image {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  margin: 0 auto;
+  background-color: #f1f1f1;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.timeline-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+</style>
