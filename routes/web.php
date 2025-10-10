@@ -82,5 +82,23 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/editarDonaciones', [SoporteController::class, 'editarDonaciones']);
         //RUTA PARA ELIMINAR LAS DONACIONES
         Route::post('/eliminarDonacion', [SoporteController::class, 'eliminarDonacion']);
+
+        //RUTAS PARA OBTENER LOS GASTOS
+        Route::get('/getGastos', [SoporteController::class, 'getGastos']);
+        //RUTA PARA GUARDAR LOS GASTOS
+        Route::post('/guardarGastos', [SoporteController::class, 'guardarGastos']);
+        //RUTA PARA EDITAR LOS GASTOS
+        Route::post('/editarGastos', [SoporteController::class, 'editarGastos']);
+        //RUTA PARA ELIMININAR GASTOS
+        Route::post('/eliminarGastos', [SoporteController::class, 'eliminarGastos']);
+
+        //RUTA PARA OBTENER LOS CORRALES
+        Route::get('/getCorrales', [SoporteController::class, 'getCorrales']);
+        //RUTA PARA GUARDAR LOS CORRALES
+        Route::post('/guardarCorrales', [SoporteController::class, 'guardarCorrales']);
+        //RUTA PARA EDITAR CORRALES
+        Route::post('/editarCorrales', [SoporteController::class, 'editarCorrales']);
+        //RUTA PARA ELIMINAR CORRALES
+        Route::post('/eliminarCorral', [SoporteController::class, 'eliminarCorral']);
     });
 });
