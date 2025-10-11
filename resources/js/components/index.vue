@@ -11,6 +11,7 @@ import Donantes from './soporte/Donantes.vue';
 import Donaciones from './soporte/Donaciones.vue';
 import Gastos from './soporte/Gastos.vue';
 import CategoriaGastos from './soporte/CategoriaGastos.vue';
+import AsignacionEspacios from './soporte/AsignacionEspacios.vue';
 
 export default {
   data() {
@@ -24,7 +25,8 @@ export default {
     Donantes,
     Donaciones,
     Gastos,
-    CategoriaGastos
+    CategoriaGastos,
+    AsignacionEspacios
   },
   mounted() {
     document.addEventListener('selectComponent', (e) => {
