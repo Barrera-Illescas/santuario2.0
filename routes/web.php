@@ -100,5 +100,14 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/editarCorrales', [SoporteController::class, 'editarCorrales']);
         //RUTA PARA ELIMINAR CORRALES
         Route::post('/eliminarCorral', [SoporteController::class, 'eliminarCorral']);
+
+        //RUTA PARA OBTENER LA ASIGNACIÓN DE ESPACIOS
+        Route::get('/getAsigacion', [SoporteController::class, 'getAsigacion']);
+        //RUTA PARA GUARDAR LA ASIGNACIÓN DE ESPACIOS
+        Route::post('/guardarLugar', [SoporteController::class, 'guardarLugar']);
+        //RUTA PARA EDITAR LA ASIGNACIÓN DE LUGARES
+        Route::post('/editarLugares', [SoporteController::class, 'editarLugares']);
+        //RUTA PARA ELIMINAR LA ASIGNACIÓN DE LUGARES
+        Route::post('/eliminarLugar', [SoporteController::class, 'eliminarLugar']);
     });
 });

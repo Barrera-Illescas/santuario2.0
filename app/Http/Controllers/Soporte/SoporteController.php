@@ -417,6 +417,10 @@ class SoporteController extends Controller
     {
         $corrales = DB::table('corrales')
             ->where('corrales.estado', 1)
+            ->leftJoin('animales', function ($join) {
+                $join->on('corrales.id', '=', 'animales.corral_id')
+                    ->where('animales.estado', 1); // solo animales activos
+            })
             ->join('especie', 'corrales.especie_id', '=', 'especie.id')
             ->select([
                 'corrales.id',
@@ -425,8 +429,19 @@ class SoporteController extends Controller
                 'corrales.ubicacion',
                 'especie.id as especieId',
                 'especie.nombre as especie',
+                DB::raw('COUNT(animales.id) as ocupados'),
+                DB::raw('corrales.capacidad - COUNT(animales.id) as disponibles'),
             ])
+            ->groupBy(
+                'corrales.id',
+                'corrales.nombre',
+                'corrales.capacidad',
+                'corrales.ubicacion',
+                'especie.id',
+                'especie.nombre'
+            )
             ->get();
+
 
         $especies = $this->getEspecies();
 
@@ -495,6 +510,126 @@ class SoporteController extends Controller
             ]);
         } catch (\Exception $e) {
             return 'Error al eliminar corral ' . $e;
+        }
+    }
+    public function getAsigacion()
+    {
+        $asignacion = DB::table('animales')
+            ->where('animales.estado', 1)
+            ->join('especie', 'animales.especie_id', '=', 'especie.id')
+            ->join('corrales', 'animales.corral_id', '=', 'corrales.id')
+            ->select([
+                'animales.id',
+                'animales.nombre as nombre',
+                'animales.edad',
+                'animales.fecha_ingreso',
+                'especie.id as especieId',
+                'especie.nombre as especie',
+                'corrales.id as corralesId',
+                'corrales.nombre as corral',
+            ])
+            ->get();
+
+        $especies = $this->getEspecies();
+
+        $corrales = DB::table('corrales')
+            ->leftJoin('animales', function ($join) {
+                $join->on('corrales.id', '=', 'animales.corral_id')
+                    ->where('animales.estado', 1);
+            })
+            ->join('especie', 'corrales.especie_id', '=', 'especie.id')
+            ->where('corrales.estado', 1)
+            ->select([
+                'corrales.id',
+                'corrales.nombre',
+                'corrales.capacidad',
+                'corrales.ubicacion',
+                'corrales.especie_id',
+                'especie.nombre as especie',
+                DB::raw('COUNT(animales.id) as ocupados'),
+                DB::raw('corrales.capacidad - COUNT(animales.id) as disponibles'),
+            ])
+            ->groupBy(
+                'corrales.id',
+                'corrales.nombre',
+                'corrales.capacidad',
+                'corrales.ubicacion',
+                'corrales.especie_id',
+                'especie.nombre'
+            )
+            ->having(DB::raw('corrales.capacidad - COUNT(animales.id)'), '>', 0)
+            ->get();
+
+
+        return response()->json([
+            'asignacion' => $asignacion,
+            'corrales' => $corrales,
+            'especies' => $especies,
+
+        ]);
+    }
+    public function guardarLugar(Request $request)
+    {
+        try {
+            $user = Auth::user();
+            $fechaIngreso = Carbon::parse($request->data['fechaIngreso'])->toDateString();
+            $lugares = DB::table('animales')
+                ->insertGetId([
+                    'nombre' => $request->data['nombre'],
+                    'edad' => $request->data['edad'],
+                    'fecha_ingreso' => $fechaIngreso,
+                    'especie_id' => $request->data['especie'],
+                    'corral_id' => $request->data['especioCorrales'],
+                    'usuario_id' => $user->id,
+                    'estado' => 1,
+                    'created_at' => $this->today->format('Y-m-d H:i:s'),
+                    'updated_at' => $this->today->format('Y-m-d H:i:s'),
+                ]);
+            return response()->json([
+                'status' => 'ok',
+                'lugares' => $lugares
+            ]);
+        } catch (\Exception $e) {
+            return 'Error al guardar lugares ' . $e;
+        }
+    }
+    public function editarLugares(Request $request)
+    {
+        try {
+            $fechaIngreso = Carbon::parse($request->data['fechaIngreso'])->toDateString();
+            DB::table('animales')
+                ->where('id', $request->id)
+                ->update([
+                    'nombre' => $request->data['nombre'],
+                    'edad' => $request->data['edad'],
+                    'fecha_ingreso' => $fechaIngreso,
+                    'especie_id' => $request->data['especie'],
+                    'corral_id' => $request->data['especioCorrales'],
+                    'updated_at' => $this->today->format('Y-m-d H:i:s'),
+                ]);
+
+            return response()->json([
+                'status' => 'ok',
+            ]);
+        } catch (\Exception $e) {
+            return 'Error al editar lugares ' . $e;
+        }
+    }
+    public function eliminarLugar(Request $request)
+    {
+        try {
+            DB::table('animales')
+                ->where('id', $request->id)
+                ->update([
+                    'estado' => 0,
+                    'updated_at' => $this->today->format('Y-m-d H:i:s'),
+                ]);
+
+            return response()->json([
+                'status' => 'ok',
+            ]);
+        } catch (\Exception $e) {
+            return 'Error al eliminar lugar ' . $e;
         }
     }
 }
