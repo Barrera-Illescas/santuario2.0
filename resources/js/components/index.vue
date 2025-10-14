@@ -5,6 +5,7 @@
 </template>
 
 <script>
+import dashboardSoporte from './soporte/dashboardSoporte.vue';
 import Animales from './soporte/Animales.vue';
 import Capacidad from './soporte/capacidad.vue';
 import Donantes from './soporte/Donantes.vue';
@@ -19,6 +20,7 @@ export default {
     };
   },
   components: {
+    dashboardSoporte,
     Animales,
     Capacidad,
     Donantes,
