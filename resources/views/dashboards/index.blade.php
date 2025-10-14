@@ -153,7 +153,9 @@
 
                 <div class="sidebar-header ">
                     <div class="user-pic justify-content-center">
-                        <img src="./assets/img/logo.png" alt="User picture">
+                            <li><a href="#" onclick="selectComponent('dashboardSoporte', this)">
+                                <img src="./assets/img/logo.png" alt="User picture"></a>
+                            </li>
                     </div>
                     <div class="user-info">
                         <span class="user-name">{{ Auth::user()->name }}</span><br>
