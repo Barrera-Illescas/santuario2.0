@@ -170,6 +170,8 @@
                                 Animales</a></li>
                         <li><a href="#" onclick="selectComponent('Capacidad', this)"><i class="fa fa-map-marker" ></i>
                                 Capacidad</a></li>
+                        <li><a href="#" onclick="selectComponent('AsignacionEspacios', this)"><i class="fa fa-home" ></i>
+                                Asignación - Corral</a></li>
                         <li><a href="#" onclick="selectComponent('Donantes', this)"><i class="fa fa-users"></i>
                                 Donantes</a></li>
                         <li><a href="#" onclick="selectComponent('Donaciones', this)"><i class="fa fa-gift"></i>

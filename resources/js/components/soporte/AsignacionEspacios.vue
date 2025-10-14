@@ -23,7 +23,7 @@
             </v-col>
         </v-row>
         <v-divider class="mt-8"></v-divider>
-        <v-data-table :headers="headers" :items="itemsCapacidad" :search="search">
+        <v-data-table :headers="headers" :items="itemsCorrales" :search="search">
             <template v-slot:item.actions="{ item }">
                 <v-row class="justify-center align-center">
                     <v-col class="col-6">
@@ -53,6 +53,7 @@
         </v-data-table>
     </div>
 
+
     <v-dialog v-model="dialogoCorrales" max-width="60%" transition="dialog-top-transition" persistent>
         <v-card class="pa-6 rounded-lg elevation-12">
             <!-- Encabezado -->
@@ -65,41 +66,59 @@
             <!-- Formulario -->
             <v-card-text>
                 <v-form ref="refsCorral">
-                    <v-row class="mb-4 justify-space-between" dense>
-                        <v-col cols="6" md="6" class="justify-center">
+                    <v-row class="mb-4" dense>
+                        <v-col cols="12" md="6">
                             <v-text-field v-model="data.nombre" label="Nombre" variant="outlined" rounded
-                                :rules="[...requiredRule]" />
+                                density="comfortable" :rules="requiredRule" />
                         </v-col>
-                        <v-col cols="6" md="6">
-                            <v-text-field v-model="data.capacidad" label="Capacidad" variant="outlined" rounded
-                                prefix="Q" :rules="[...requiredRule]" />
+                        <v-col cols="12" md="6">
+                            <v-text-field v-model="data.edad" label="Edad" variant="outlined" rounded
+                                density="comfortable" :rules="requiredRule" type="number" />
                         </v-col>
                     </v-row>
-                    <v-row class="mb-4 justify-space-between" dense>
-                        <v-col cols="6" md="6" class="justify-center">
-                            <v-text-field v-model="data.ubicacion" label="Ubicación" variant="outlined" rounded
-                                 />
+
+                    <v-row class="mb-4" dense>
+                        <v-col cols="12" md="6">
+                            <v-menu v-model="data.menu" transition="scale-transition" :close-on-content-click="false"
+                                max-width="290px" min-width="290px">
+                                <template v-slot:activator="{ props }">
+                                    <v-text-field v-bind="props" v-model="computedFechaIngreso" label="Fecha de ingreso"
+                                        variant="outlined" rounded density="comfortable" :rules="requiredRule"
+                                        readonly />
+                                </template>
+                                <v-date-picker v-model="data.fechaIngreso" :max="dateNow"
+                                    @update:modelValue="data.menu = false" />
+                            </v-menu>
                         </v-col>
-                        <v-col cols="6" md="6" class="justify-center">
-                            <v-select rounded variant="outlined" v-model="data.especie" label="Especie"
-                                :items="itemsEspecie" item-value="id" item-title="nombre" />
+
+                        <v-col cols="12" md="6">
+                            <v-select v-model="data.especie" :items="itemsEspecie" item-value="id" item-title="nombre"
+                                label="Especie" variant="outlined" rounded density="comfortable"
+                                :rules="requiredRule" />
+                        </v-col>
+                    </v-row>
+
+                    <v-row class="mb-4" dense>
+                        <v-col cols="12" md="6">
+                            <v-select v-model="data.especioCorrales" :items="corralesFiltrados" item-value="id"
+                                item-title="nombre" label="Corral" variant="outlined" rounded density="comfortable"
+                                :rules="requiredRule" />
                         </v-col>
                     </v-row>
 
                     <!-- Botones -->
                     <v-row justify="center">
                         <v-col cols="12" md="6" class="d-flex justify-center gap-4">
-                            <v-btn v-if="banderaDialogo == 1" color="success" @click.prevent="guardarCorrales()"
-                                rounded>
+                            <v-btn v-if="banderaDialogo === 1" color="success" @click.prevent="guardarLugar()" rounded>
                                 <v-icon start icon="mdi-content-save" />
                                 Guardar
                             </v-btn>
-                            <v-btn v-if="banderaDialogo == 2" color="success" @click.prevent="editarSaveCorrales()"
+                            <v-btn v-if="banderaDialogo === 2" color="success" @click.prevent="edatarSaveLugares()"
                                 rounded>
                                 <v-icon start icon="mdi-content-save" />
                                 Actualizar
                             </v-btn>
-                            <v-btn class="bg-warning" @click="closeDialog()" rounded>
+                            <v-btn class="bg-danger" @click="closeDialog()" rounded>
                                 <v-icon start icon="mdi-close" />
                                 Cancelar
                             </v-btn>
@@ -110,12 +129,13 @@
         </v-card>
     </v-dialog>
 
+
 </template>
 <script>
 import Swal from 'sweetalert2';
 
 export default {
-    name: 'Capacidad',
+    name: 'Corrales',
 
     data() {
         return {
@@ -126,23 +146,26 @@ export default {
             idItem: null,
             data: {
                 nombre: '',
-                capacidad: null,
-                ubicacion: '',
+                edad: null,
+                fechaIngreso: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)),
                 especie: null,
+                especioCorrales: null,
+                menu: false,
             },
             banderaDialogo: null,
 
             headers: [
                 { title: 'ID', value: 'id' },
                 { title: 'NOMBRE', value: 'nombre' },
-                { title: 'CAPACIDAD TOTAL', value: 'capacidad', align: 'center' },
-                { title: 'ESPACIOS DISPONIBLES', value: 'disponibles', align: 'center'},
-                { title: 'UBICACIÓN', value: 'ubicacion' },
+                { title: 'EDAD', value: 'edad' },
+                { title: 'FECHA DE INGRESO', value: 'fecha_ingreso' },
                 { title: 'ESPECIE', value: 'especie' },
+                { title: 'CORRAL', value: 'corral' },
                 { title: 'ACCIONES', value: 'actions', align: 'center' },
             ],
-            itemsCapacidad: [],
+            itemsCorrales: [],
             itemsEspecie: [],
+            itemsLugares: [],
 
             dateNow: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
 
@@ -153,11 +176,11 @@ export default {
 
     methods: {
         getData() {
-            axios.get('/colaborador/getCorrales')
+            axios.get('/colaborador/getAsigacion')
                 .then(response => {
-                    this.itemsCapacidad = response.data.corrales;
+                    this.itemsCorrales = response.data.asignacion;
                     this.itemsEspecie = response.data.especies.original.especies;
-
+                    this.itemsLugares = response.data.corrales;
                 })
         },
 
@@ -296,9 +319,18 @@ export default {
     },
 
     computed: {
-        computedFechaGasto() {
-            return this.formatoFecha(this.data.fecha);
+        corralesFiltrados() {
+            if (!this.data.especie) return [];
+            return this.itemsLugares.filter(
+                corral => corral.especie_id === this.data.especie
+            );
+        },
+
+
+        computedFechaIngreso() {
+            return this.formatoFecha(this.data.fechaIngreso);
         },
     }
+
 }
 </script>
