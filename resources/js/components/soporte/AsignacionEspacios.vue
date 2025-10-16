@@ -118,7 +118,7 @@
                                 <v-icon start icon="mdi-content-save" />
                                 Actualizar
                             </v-btn>
-                            <v-btn class="bg-danger" @click="closeDialog()" rounded>
+                            <v-btn class="bg-warning" @click="closeDialog()" rounded>
                                 <v-icon start icon="mdi-close" />
                                 Cancelar
                             </v-btn>
@@ -334,3 +334,9 @@ export default {
 
 }
 </script>
+<style>
+.v-text-field .v-field--active input,
+.v-select .v-field .v-field__input>input {
+    border: none;
+}
+</style>

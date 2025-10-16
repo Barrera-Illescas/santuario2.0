@@ -270,3 +270,9 @@ export default {
     },
 }
 </script>
+<style>
+.v-text-field .v-field--active input,
+.v-select .v-field .v-field__input>input {
+    border: none;
+}
+</style>
