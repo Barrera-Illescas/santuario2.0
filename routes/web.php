@@ -109,5 +109,18 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/editarLugares', [SoporteController::class, 'editarLugares']);
         //RUTA PARA ELIMINAR LA ASIGNACIÓN DE LUGARES
         Route::post('/eliminarLugar', [SoporteController::class, 'eliminarLugar']);
+
+        //RUTA PARA OBTENER LAS CATEGORÍAS DE PORTAFOLIO
+        Route::get('/getCategoriaPortafolio', [SoporteController::class, 'getCategoriaPortafolio']);
+        //RUTA PARA GUARDAR LAS CATEGORÍAS DE PORTAFOLIO
+        Route::post('/guardarCatPortafolio', [SoporteController:: class, 'guardarCatPortafolio']);
+        //RUTA PARA EDITAR LAS CATEGORÍAS DEL PORTAFOLIO
+        Route::post('/editarCatPortafolio', [SoporteController::class, 'editarCatPortafolio']);
+        //RUTA PARA ELIMINAR LAS CATEGORÍAS DEL PORTAFOLIO
+        Route::post('/eliminarCAtPortafolio', [SoporteController::class, 'eliminarCAtPortafolio']);
+
+        //RUTA PARA OBTENER LOS DATOS DEL PORTAFOLIO
+        Route::get('/getPortafolio', [SoporteController::class, 'getPortafolio']);
+
     });
 });
