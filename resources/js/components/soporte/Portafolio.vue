@@ -24,6 +24,10 @@
         </v-row>
         <v-divider class="mt-8"></v-divider>
         <v-data-table :headers="headers" :items="itemsPOrtafolio" :search="search">
+            <template v-slot:item.imagen="{ item }">
+                <v-img :src="`/portafolio/${item.imagen_url}`" max-width="100" max-height="100" contain
+                    class="rounded"></v-img>
+            </template>
             <template v-slot:item.estado="{ item }">
                 <span>{{ item.estado === 1 ? 'Activo' : 'Inactivo' }}</span>
             </template>
@@ -32,7 +36,7 @@
                     <v-col class="col-6">
                         <v-tooltip>
                             <template v-slot:activator="{ props }">
-                                <v-icon size="x-large" class="mr-2" @click="editarDonaciones(item)" color="success"
+                                <v-icon size="x-large" class="mr-2" @click="editarPOrtafolio(item)" color="success"
                                     v-bind="props">
                                     mdi mdi-pencil
                                 </v-icon>
@@ -67,44 +71,39 @@
 
             <!-- Formulario -->
             <v-card-text>
-                <v-form ref="refsCatGastos">
+                <v-form ref="refsPortafolio">
                     <v-row class="mb-4 justify-space-between" dense>
                         <v-col cols="6" md="6" class="justify-center">
-                            <v-select v-model="data.donante" label="Donante" variant="outlined" rounded
-                                :items="itemsCategoria" item-title="nombre" item-value="id"
+                            <v-text-field v-model="data.titulo" label="Titulo" variant="outlined" rounded
                                 :rules="[...requiredRule]" />
                         </v-col>
                         <v-col cols="6" md="6">
-                            <v-text-field v-model="data.monto" label="Monto" variant="outlined" rounded prefix="Q"
-                                :rules="[...requiredRule]" />
+                            <v-text-field v-model="data.subtitulo" label="Subtitulo" variant="outlined" rounded />
                         </v-col>
                     </v-row>
                     <v-row class="mb-4 justify-space-between" dense>
-                        <v-menu v-model="data.menu" transition="scale-transition" :close-on-content-click="false">
-                            <template v-slot:activator="{ props }">
-                                <v-text-field v-bind="props" rounded variant="outlined" class="custom-text-field"
-                                    label="Fecha de donación" :rules="[...requiredRule]"
-                                    v-model="computedFechaDonacion"></v-text-field>
-                            </template>
-                            <v-date-picker v-model="data.fecha" :max="dateNow"
-                                @update:modelValue="data.menu = false"></v-date-picker>
-                        </v-menu>
                         <v-col cols="6" md="6" class="justify-center">
-                            <v-select v-model="data.metodoPago" label="Método de pago" variant="outlined" rounded
+                            <v-file-input label="Subir imagen" v-model="data.imagen"
+                                accept="image/png, image/jpeg, image/jpg, image/gif, image/webp" variant="outlined"
+                                rounded prepend-icon="mdi-image"></v-file-input>
+                        </v-col>
+                        <v-col cols="6" md="6" class="justify-center">
+                            <v-select v-model="data.categoria" label="Categoría" variant="outlined" rounded
+                                :items="itemsCategoria" item-title="nombre" item-value="id"
                                 :rules="[...requiredRule]" />
                         </v-col>
                     </v-row>
                     <v-row class="mb-4 justify-space-between">
                         <v-col cols="12" md="12" class="justify-center">
-                            <v-textarea rounded variant="outlined" v-model="data.comentario"
-                                label="comentario"></v-textarea>
+                            <v-textarea rounded variant="outlined" v-model="data.descripcion"
+                                label="Descripción"></v-textarea>
                         </v-col>
                     </v-row>
 
                     <!-- Botones -->
                     <v-row justify="center">
                         <v-col cols="12" md="6" class="d-flex justify-center gap-4">
-                            <v-btn v-if="banderaDialogo == 1" color="success" @click.prevent="guardarDonaciones()"
+                            <v-btn v-if="banderaDialogo == 1" color="success" @click.prevent="guardarPortafolio()"
                                 rounded>
                                 <v-icon start icon="mdi-content-save" />
                                 Guardar
@@ -140,9 +139,9 @@ export default {
             titleDialogo: '',
             idItem: null,
             data: {
-                titlo: '',
+                titulo: '',
                 subtitulo: '',
-                imagen: '',
+                imagen: null,
                 descripcion: '',
                 categoria: null,
             },
@@ -152,7 +151,7 @@ export default {
                 { title: 'ID', value: 'id' },
                 { title: 'TITULO', value: 'titulo' },
                 { title: 'SUBTITULO', value: 'subtitulo' },
-                { title: 'IMAGEN', value: 'imagen_url' },
+                { title: 'IMAGEN', value: 'imagen' },
                 { title: 'DESCRIPCIÓN', value: 'descripcion' },
                 { title: 'CATEGORÍA', value: 'categoria' },
                 { title: 'FECHA PUBLICACIÓN', value: 'fecha_publicacion' },
@@ -190,17 +189,30 @@ export default {
             this.dialogoPortafolio = false;
             this.overlay = false;
             // this.idItem = null;
-            if (this.$refs.refsCatGastos) this.$refs.refsCatGastos.reset();
+            if (this.$refs.refsPortafolio) this.$refs.refsPortafolio.reset();
         },
 
-        async guardarDonaciones() {
+        async guardarPortafolio() {
+            const resul = await this.$refs.refsPortafolio.validate();
+            console.log(this.data.imagen);
+            console.log(this.data.imagen instanceof File); // debe ser true
 
-            const resul = await this.$refs.refsCatGastos.validate();
+
 
             if (resul.valid) {
                 this.overlay = true;
-                axios.post('/colaborador/guardarDonaciones', {
-                    data: this.data,
+
+                const formData = new FormData();
+                formData.append('titulo', this.data.titulo);
+                formData.append('subtitulo', this.data.subtitulo);
+                formData.append('categoria', this.data.categoria);
+                formData.append('descripcion', this.data.descripcion);
+                formData.append('imagen', this.data.imagen); // archivo de imagen
+
+                axios.post('/colaborador/guardarPortafolio', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
                 }).then(res => {
                     this.overlay = false;
                     if (res.data.status === 'ok') {
@@ -210,19 +222,18 @@ export default {
                             text: '¡Registro guardado exitosamente!'
                         });
                         this.getData();
-                    }
-                    else {
+                    } else {
                         this.dialogoPortafolio = false;
                         Swal.fire({
                             icon: 'error',
                             text: 'Ha ocurrido un error al guardar el registro. Intente de nuevo.'
                         });
                     }
-                })
+                });
             }
         },
 
-        editarDonaciones(item) {
+        editarPOrtafolio(item) {
             console.log('item ', item);
             this.overlay = true;
             this.idItem = item.id;
@@ -244,11 +255,11 @@ export default {
         },
 
         async editaqrSaveDonaciones() {
-            const resul = await this.$refs.refsCatGastos.validate();
+            const resul = await this.$refs.refsPortafolio.validate();
 
             if (resul.valid) {
                 this.overlay = true;
-                axios.post('/colaborador/editarDonaciones', {
+                axios.post('/colaborador/editarPOrtafolio', {
                     id: this.idItem,
                     data: this.data,
                 }).then(res => {
@@ -325,3 +336,9 @@ export default {
     }
 }
 </script>
+<style>
+.v-text-field .v-field--active input,
+.v-select .v-field .v-field__input>input {
+    border: none;
+}
+</style>

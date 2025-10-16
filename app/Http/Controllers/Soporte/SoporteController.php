@@ -646,13 +646,13 @@ class SoporteController extends Controller
     {
         try {
             $newCatPortafolio = DB::table('categorias_portafolio')
-            ->insertGetId([
-                'nombre' => $request->data['nombre'],
-                'descripcion' => $request->data['descripcion'],
-                'estado' => 1,
-                'created_at' => $this->today->format('Y-m-d H:i:s'),
-                'updated_at' => $this->today->format('Y-m-d H:i:s'),
-            ]);
+                ->insertGetId([
+                    'nombre' => $request->data['nombre'],
+                    'descripcion' => $request->data['descripcion'],
+                    'estado' => 1,
+                    'created_at' => $this->today->format('Y-m-d H:i:s'),
+                    'updated_at' => $this->today->format('Y-m-d H:i:s'),
+                ]);
             return response()->json([
                 'status' => 'ok',
                 'newCatPortafolio' => $newCatPortafolio
@@ -665,13 +665,13 @@ class SoporteController extends Controller
     {
         try {
             DB::table('categorias_portafolio')
-            ->where('id', $request->id)
-            ->update([
-                'nombre' => $request->data['nombre'],
-                'descripcion' => $request->data['descripcion'],
-                'updated_at' => $this->today->format('Y-m-d H:i:s'),
-            ]);
-            
+                ->where('id', $request->id)
+                ->update([
+                    'nombre' => $request->data['nombre'],
+                    'descripcion' => $request->data['descripcion'],
+                    'updated_at' => $this->today->format('Y-m-d H:i:s'),
+                ]);
+
             return response()->json([
                 'status' => 'ok',
             ]);
@@ -683,12 +683,12 @@ class SoporteController extends Controller
     {
         try {
             DB::table('categorias_portafolio')
-            ->where('id', $request->id)
-            ->update([
-                'estado' => 0,
-                'updated_at' => $this->today->format('Y-m-d H:i:s'),
-            ]);
-            
+                ->where('id', $request->id)
+                ->update([
+                    'estado' => 0,
+                    'updated_at' => $this->today->format('Y-m-d H:i:s'),
+                ]);
+
             return response()->json([
                 'status' => 'ok',
             ]);
@@ -709,12 +709,60 @@ class SoporteController extends Controller
                 'users.name as nombreUsuario',
             ])
             ->get();
-        
+
         $catPortafolio = $this->getCategoriaPortafolio();
-    
+
         return response()->json([
             'portafolio' => $portafolio,
             'catPortafolio' => $catPortafolio,
         ]);
+    }
+
+    public function guardarPortafolio(Request $request)
+    {
+        try {
+            // dd($request->file('imagen')->getMimeType());
+
+            $userLog = Auth::user();
+            // $request->validate([
+            //     'titulo' => 'required|string',
+            //     'subtitulo' => 'nullable|string',
+            //     'categoria' => 'required|integer',
+            //     'descripcion' => 'nullable|string',
+            //     'imagen' => 'required|file|max:2048',
+            // ]);
+    
+            if ($request->hasFile('imagen')) {
+                $imagen = $request->file('imagen');
+                $nombreImagen = time() . '_' . $imagen->getClientOriginalName();
+                $imagen->move(public_path('portafolio'), $nombreImagen);
+                // $ruta = $imagen->storeAs('public/portafolio', $nombreImagen); // guarda en storage/app/public/portafolio
+
+
+                // Guardar en base de datos
+                $portafolio = DB::table('portafolios')
+                    ->insertGetId([
+                        'titulo' => $request->titulo,
+                        'subtitulo' => $request->subtitulo,
+                        'categoria_id' => $request->categoria,
+                        'descripcion' => $request->descripcion,
+                        'fecha_publicacion' => $this->today->format('Y-m-d'),
+                        'imagen_url' => $nombreImagen ?? null,
+                        'usuario_id' => $userLog->id,
+                        'estado' => 1,
+                        'created_at' => $this->today->format('Y-m-d H:i:s'),
+                        'updated_at' => $this->today->format('Y-m-d H:i:s'),
+                    ]);
+        
+                return response()->json([
+                    'status' => 'ok',
+                    'portafolio' => $portafolio
+                ]);
+
+            }
+    
+        } catch (\Exception $e) {
+            return 'Error al guardar portafolio '. $e->getMessage();
+        }
     }
 }

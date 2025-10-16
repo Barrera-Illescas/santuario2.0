@@ -121,6 +121,8 @@ Route::middleware(['auth'])->group(function () {
 
         //RUTA PARA OBTENER LOS DATOS DEL PORTAFOLIO
         Route::get('/getPortafolio', [SoporteController::class, 'getPortafolio']);
+        //RUTA PARA GUARDAR LOS DATOS DEL PORTAFOLIO
+        Route::post('/guardarPortafolio', [SoporteController::class, 'guardarPortafolio']);
 
     });
 });
