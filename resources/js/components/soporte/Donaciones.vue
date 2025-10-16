@@ -230,11 +230,11 @@ export default {
             this.data.monto = item.monto;
             // this.data.fecha = new Date(item.fecha);
             const [year, month, day] = item.fecha.split('-');
-                this.data.fecha = new Date(
-                    parseInt(year),
-                    parseInt(month) - 1, // Los meses en JS van de 0 a 11
-                    parseInt(day)
-                );
+            this.data.fecha = new Date(
+                parseInt(year),
+                parseInt(month) - 1, // Los meses en JS van de 0 a 11
+                parseInt(day)
+            );
             this.data.metodoPago = item.metodoPagoId;
             this.data.comentario = item.comentario;
             this.titleDialogo = 'Editar Donación';
@@ -325,3 +325,9 @@ export default {
     }
 }
 </script>
+<style>
+.v-text-field .v-field--active input,
+.v-select .v-field .v-field__input>input {
+    border: none;
+}
+</style>
