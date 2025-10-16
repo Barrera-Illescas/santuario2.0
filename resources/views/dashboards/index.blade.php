@@ -180,6 +180,10 @@
                                 Gastos</a></li>
                         <li><a href="#" onclick="selectComponent('CategoriaGastos', this)"><i class="fa fa-sticky-note"></i>
                                 Categoría - Gastos</a></li>
+                        <li><a href="#" onclick="selectComponent('Portafolio', this)"><i class="fa-solid fa-briefcase"></i>
+                                Portafolio</a></li>
+                        <li><a href="#" onclick="selectComponent('CategoriaPortafolio', this)"><i class="fa-solid fa-address-book"></i>
+                                Categoría - Portafolio</a></li>
                         <hr />
                         <li><a href="{{ route('profile.edit') }}"><i class="fa fa-user"></i> Perfil</a></li>
                         <li>

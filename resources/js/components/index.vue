@@ -13,6 +13,8 @@ import Donaciones from './soporte/Donaciones.vue';
 import Gastos from './soporte/Gastos.vue';
 import CategoriaGastos from './soporte/CategoriaGastos.vue';
 import AsignacionEspacios from './soporte/AsignacionEspacios.vue';
+import CategoriaPortafolio from './soporte/CategoriaPortafolio.vue';
+import Portafolio from './soporte/Portafolio.vue';
 
 export default {
   data() {
@@ -28,7 +30,9 @@ export default {
     Donaciones,
     Gastos,
     CategoriaGastos,
-    AsignacionEspacios
+    AsignacionEspacios,
+    CategoriaPortafolio,
+    Portafolio,
   },
   mounted() {
     document.addEventListener('selectComponent', (e) => {

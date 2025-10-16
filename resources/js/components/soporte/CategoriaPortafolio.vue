@@ -23,13 +23,13 @@
             </v-col>
         </v-row>
         <v-divider class="mt-8"></v-divider>
-        <v-data-table :headers="headers" :items="itemsCategoriaGastos" :search="search">
+        <v-data-table :headers="headers" :items="itemsCategoriaPortafolio" :search="search">
             <template v-slot:item.actions="{ item }">
                 <v-row class="justify-center align-center">
                     <v-col class="col-6">
                         <v-tooltip>
                             <template v-slot:activator="{ props }">
-                                <v-icon size="x-large" class="mr-2" @click="editarCatGastos(item)" color="success"
+                                <v-icon size="x-large" class="mr-2" @click="editarCatPortafolio(item)" color="success"
                                     v-bind="props">
                                     mdi mdi-pencil
                                 </v-icon>
@@ -40,7 +40,7 @@
                     <v-col class="col-6">
                         <v-tooltip>
                             <template v-slot:activator="{ props }">
-                                <v-icon size="x-large" class="mr-2" @click="eliminarCatGasto(item)" color="danger"
+                                <v-icon size="x-large" class="mr-2" @click="eliminarCAtPortafolio(item)" color="danger"
                                     v-bind="props">
                                     mdi mdi-trash-can
                                 </v-icon>
@@ -53,7 +53,7 @@
         </v-data-table>
     </div>
 
-    <v-dialog v-model="dialogoCategoriaGastos" max-width="60%" transition="dialog-top-transition" persistent>
+    <v-dialog v-model="dialogoCategoriaPortafolio" max-width="60%" transition="dialog-top-transition" persistent>
         <v-card class="pa-6 rounded-lg elevation-12">
             <!-- Encabezado -->
             <v-toolbar color="primary" dark flat class="rounded-lg mb-4">
@@ -79,11 +79,11 @@
                     <!-- Botones -->
                     <v-row justify="center">
                         <v-col cols="12" md="6" class="d-flex justify-center gap-4">
-                            <v-btn v-if="banderaDialogo == 1" color="success" @click.prevent="guardarCatGastos()" rounded>
+                            <v-btn v-if="banderaDialogo == 1" color="success" @click.prevent="guardarCatPortafolio()" rounded>
                                 <v-icon start icon="mdi-content-save" />
                                 Guardar
                             </v-btn>
-                            <v-btn v-if="banderaDialogo == 2" color="success" @click.prevent="editarSaveCatGastos()" rounded>
+                            <v-btn v-if="banderaDialogo == 2" color="success" @click.prevent="editarSaveCatPOrtafolio()" rounded>
                                 <v-icon start icon="mdi-content-save" />
                                 Actualizar
                             </v-btn>
@@ -103,13 +103,13 @@
 import Swal from 'sweetalert2';
 
 export default {
-    name: 'CategoriaGastos',
+    name: 'CAtegoriaPOrtafolio',
 
     data() {
         return {
             overlay: false,
             search: '',
-            dialogoCategoriaGastos: false,
+            dialogoCategoriaPortafolio: false,
             titleDialogo: '',
             idItem: null,
             data: {
@@ -124,7 +124,7 @@ export default {
                 { title: 'DESCRIPCION', value: 'descripcion' },
                 { title: 'ACCIONES', value: 'actions', align: 'center' },
             ],
-            itemsCategoriaGastos: [],
+            itemsCategoriaPortafolio: [],
 
             //Reglas
             requiredRule: [v => !!v || 'Campo obligatorio'],
@@ -133,40 +133,40 @@ export default {
 
     methods: {
         getData() {
-            axios.get('/colaborador/getCategoriaGastos')
+            axios.get('/colaborador/getCategoriaPortafolio')
                 .then(response => {
-                    this.itemsCategoriaGastos = response.data.catGastos;
+                    this.itemsCategoriaPortafolio = response.data.catPortafolio;
                 })
         },
 
         openDialog() {
             this.overlay = true;
-            this.titleDialogo = "Agregar Categoria - Gastos";
+            this.titleDialogo = "Agregar Categoria - Portafolio";
             this.banderaDialogo = 1;
-            this.dialogoCategoriaGastos = true;
+            this.dialogoCategoriaPortafolio = true;
             this.overlay = false;
         },
 
         closeDialog() {
             this.overlay = true;
-            this.dialogoCategoriaGastos = false;
+            this.dialogoCategoriaPortafolio = false;
             this.overlay = false;
             // this.idItem = null;
             if (this.$refs.refsCatGastos) this.$refs.refsCatGastos.reset();
         },
 
-        async guardarCatGastos() {
+        async guardarCatPortafolio() {
 
             const resul = await this.$refs.refsCatGastos.validate();
 
             if (resul.valid) {
                 this.overlay = true;
-                axios.post('/colaborador/guardarCatGastos', {
+                axios.post('/colaborador/guardarCatPortafolio', {
                     data: this.data,
                 }).then(res => {
                     this.overlay = false;
                     if (res.data.status === 'ok') {
-                        this.dialogoCategoriaGastos = false;
+                        this.dialogoCategoriaPortafolio = false;
                         Swal.fire({
                             icon: 'success',
                             text: '¡Registro guardado exitosamente!'
@@ -174,7 +174,7 @@ export default {
                         this.getData();
                     }
                     else {
-                        this.dialogoCategoriaGastos = false;
+                        this.dialogoCategoriaPortafolio = false;
                         Swal.fire({
                             icon: 'error',
                             text: 'Ha ocurrido un error al guardar el registro. Intente de nuevo.'
@@ -184,29 +184,29 @@ export default {
             }
         },
 
-        editarCatGastos(item) {
+        editarCatPortafolio(item) {
             this.overlay = true;
             this.idItem = item.id;
             this.data.nombre = item.nombre;
             this.data.descripcion = item.descripcion;
-            this.titleDialogo = 'Editar Categoría - Gastos';
+            this.titleDialogo = 'Editar Categoría - Portafolio';
             this.banderaDialogo = 2;
-            this.dialogoCategoriaGastos = true;
+            this.dialogoCategoriaPortafolio = true;
             this.overlay = false;
         },
 
-        async editarSaveCatGastos() {
+        async editarSaveCatPOrtafolio() {
             const resul = await this.$refs.refsCatGastos.validate();
 
             if (resul.valid) {
                 this.overlay = true;
-                axios.post('/colaborador/editarCatGastos', {
+                axios.post('/colaborador/editarCatPortafolio', {
                     id: this.idItem,
                     data: this.data,
                 }).then(res => {
                     this.overlay = false;
                     if (res.data.status === 'ok') {
-                        this.dialogoCategoriaGastos = false;
+                        this.dialogoCategoriaPortafolio = false;
                         Swal.fire({
                             icon: 'success',
                             text: '¡Registro modificado exitosamente!'
@@ -214,7 +214,7 @@ export default {
                         this.getData();
                     }
                     else {
-                        this.dialogoCategoriaGastos = false;
+                        this.dialogoCategoriaPortafolio = false;
                         Swal.fire({
                             icon: 'error',
                             text: 'Ha ocurrido un error al modificar el registro. Intente de nuevo.'
@@ -224,7 +224,7 @@ export default {
             }
         },
 
-        eliminarCatGasto(item) {
+        eliminarCAtPortafolio(item) {
             Swal.fire({
                 icon: 'warning',
                 text: '¿Esta seguro de eliminar el registro?',
@@ -235,7 +235,7 @@ export default {
                 if(result.isConfirmed) {
                     this.overlay = true;
 
-                    axios.post('/colaborador/eliminarCatGasto', {
+                    axios.post('/colaborador/eliminarCAtPortafolio', {
                         id: item.id
                     }).then(res => {
                         this.overlay = false;

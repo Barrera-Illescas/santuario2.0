@@ -23,13 +23,20 @@
             </v-col>
         </v-row>
         <v-divider class="mt-8"></v-divider>
-        <v-data-table :headers="headers" :items="itemsCategoriaGastos" :search="search">
+        <v-data-table :headers="headers" :items="itemsPOrtafolio" :search="search">
+            <template v-slot:item.imagen="{ item }">
+                <v-img :src="`/portafolio/${item.imagen_url}`" max-width="100" max-height="100" contain
+                    class="rounded"></v-img>
+            </template>
+            <template v-slot:item.estado="{ item }">
+                <span>{{ item.estado === 1 ? 'Activo' : 'Inactivo' }}</span>
+            </template>
             <template v-slot:item.actions="{ item }">
                 <v-row class="justify-center align-center">
                     <v-col class="col-6">
                         <v-tooltip>
                             <template v-slot:activator="{ props }">
-                                <v-icon size="x-large" class="mr-2" @click="editarCatGastos(item)" color="success"
+                                <v-icon size="x-large" class="mr-2" @click="editarPOrtafolio(item)" color="success"
                                     v-bind="props">
                                     mdi mdi-pencil
                                 </v-icon>
@@ -40,7 +47,7 @@
                     <v-col class="col-6">
                         <v-tooltip>
                             <template v-slot:activator="{ props }">
-                                <v-icon size="x-large" class="mr-2" @click="eliminarCatGasto(item)" color="danger"
+                                <v-icon size="x-large" class="mr-2" @click="eliminarDonacion(item)" color="danger"
                                     v-bind="props">
                                     mdi mdi-trash-can
                                 </v-icon>
@@ -53,7 +60,7 @@
         </v-data-table>
     </div>
 
-    <v-dialog v-model="dialogoCategoriaGastos" max-width="60%" transition="dialog-top-transition" persistent>
+    <v-dialog v-model="dialogoPortafolio" max-width="60%" transition="dialog-top-transition" persistent>
         <v-card class="pa-6 rounded-lg elevation-12">
             <!-- Encabezado -->
             <v-toolbar color="primary" dark flat class="rounded-lg mb-4">
@@ -64,26 +71,45 @@
 
             <!-- Formulario -->
             <v-card-text>
-                <v-form ref="refsCatGastos">
-                    <v-row class="mb-4 justify-center" dense>
-                        <v-col cols="12" md="10" class="justify-center">
-                            <v-text-field v-model="data.nombre" label="Nombre de la categoría" variant="outlined" rounded
+                <v-form ref="refsPortafolio">
+                    <v-row class="mb-4 justify-space-between" dense>
+                        <v-col cols="6" md="6" class="justify-center">
+                            <v-text-field v-model="data.titulo" label="Titulo" variant="outlined" rounded
                                 :rules="[...requiredRule]" />
                         </v-col>
-                        <v-col cols="12" md="10">
-                            <v-textarea v-model="data.descripcion" label="Descripción" variant="outlined" rounded rows="4"
-                                auto-grow :rules="[...requiredRule]" />
+                        <v-col cols="6" md="6">
+                            <v-text-field v-model="data.subtitulo" label="Subtitulo" variant="outlined" rounded />
+                        </v-col>
+                    </v-row>
+                    <v-row class="mb-4 justify-space-between" dense>
+                        <v-col cols="6" md="6" class="justify-center">
+                            <v-file-input label="Subir imagen" v-model="data.imagen"
+                                accept="image/png, image/jpeg, image/jpg, image/gif, image/webp" variant="outlined"
+                                rounded prepend-icon="mdi-image"></v-file-input>
+                        </v-col>
+                        <v-col cols="6" md="6" class="justify-center">
+                            <v-select v-model="data.categoria" label="Categoría" variant="outlined" rounded
+                                :items="itemsCategoria" item-title="nombre" item-value="id"
+                                :rules="[...requiredRule]" />
+                        </v-col>
+                    </v-row>
+                    <v-row class="mb-4 justify-space-between">
+                        <v-col cols="12" md="12" class="justify-center">
+                            <v-textarea rounded variant="outlined" v-model="data.descripcion"
+                                label="Descripción"></v-textarea>
                         </v-col>
                     </v-row>
 
                     <!-- Botones -->
                     <v-row justify="center">
                         <v-col cols="12" md="6" class="d-flex justify-center gap-4">
-                            <v-btn v-if="banderaDialogo == 1" color="success" @click.prevent="guardarCatGastos()" rounded>
+                            <v-btn v-if="banderaDialogo == 1" color="success" @click.prevent="guardarPortafolio()"
+                                rounded>
                                 <v-icon start icon="mdi-content-save" />
                                 Guardar
                             </v-btn>
-                            <v-btn v-if="banderaDialogo == 2" color="success" @click.prevent="editarSaveCatGastos()" rounded>
+                            <v-btn v-if="banderaDialogo == 2" color="success" @click.prevent="editaqrSaveDonaciones()"
+                                rounded>
                                 <v-icon start icon="mdi-content-save" />
                                 Actualizar
                             </v-btn>
@@ -103,28 +129,38 @@
 import Swal from 'sweetalert2';
 
 export default {
-    name: 'CategoriaGastos',
+    name: 'Donaciones',
 
     data() {
         return {
             overlay: false,
             search: '',
-            dialogoCategoriaGastos: false,
+            dialogoPortafolio: false,
             titleDialogo: '',
             idItem: null,
             data: {
-                nombre: '',
+                titulo: '',
+                subtitulo: '',
+                imagen: null,
                 descripcion: '',
+                categoria: null,
             },
             banderaDialogo: null,
 
             headers: [
                 { title: 'ID', value: 'id' },
-                { title: 'NOMBRE', value: 'nombre' },
-                { title: 'DESCRIPCION', value: 'descripcion' },
+                { title: 'TITULO', value: 'titulo' },
+                { title: 'SUBTITULO', value: 'subtitulo' },
+                { title: 'IMAGEN', value: 'imagen' },
+                { title: 'DESCRIPCIÓN', value: 'descripcion' },
+                { title: 'CATEGORÍA', value: 'categoria' },
+                { title: 'FECHA PUBLICACIÓN', value: 'fecha_publicacion' },
+                { title: 'ESTADO', value: 'estado' },
+                { title: 'USUARIO PUBLICACIÓN', value: 'nombreUsuario' },
                 { title: 'ACCIONES', value: 'actions', align: 'center' },
             ],
-            itemsCategoriaGastos: [],
+            itemsPOrtafolio: [],
+            itemsCategoria: [],
 
             //Reglas
             requiredRule: [v => !!v || 'Campo obligatorio'],
@@ -133,80 +169,103 @@ export default {
 
     methods: {
         getData() {
-            axios.get('/colaborador/getCategoriaGastos')
+            axios.get('/colaborador/getPortafolio')
                 .then(response => {
-                    this.itemsCategoriaGastos = response.data.catGastos;
+                    this.itemsPOrtafolio = response.data.portafolio;
+                    this.itemsCategoria = response.data.catPortafolio.original.catPortafolio;
                 })
         },
 
         openDialog() {
             this.overlay = true;
-            this.titleDialogo = "Agregar Categoria - Gastos";
+            this.titleDialogo = "Agregar Publicación";
             this.banderaDialogo = 1;
-            this.dialogoCategoriaGastos = true;
+            this.dialogoPortafolio = true;
             this.overlay = false;
         },
 
         closeDialog() {
             this.overlay = true;
-            this.dialogoCategoriaGastos = false;
+            this.dialogoPortafolio = false;
             this.overlay = false;
             // this.idItem = null;
-            if (this.$refs.refsCatGastos) this.$refs.refsCatGastos.reset();
+            if (this.$refs.refsPortafolio) this.$refs.refsPortafolio.reset();
         },
 
-        async guardarCatGastos() {
+        async guardarPortafolio() {
+            const resul = await this.$refs.refsPortafolio.validate();
+            console.log(this.data.imagen);
+            console.log(this.data.imagen instanceof File); // debe ser true
 
-            const resul = await this.$refs.refsCatGastos.validate();
+
 
             if (resul.valid) {
                 this.overlay = true;
-                axios.post('/colaborador/guardarCatGastos', {
-                    data: this.data,
+
+                const formData = new FormData();
+                formData.append('titulo', this.data.titulo);
+                formData.append('subtitulo', this.data.subtitulo);
+                formData.append('categoria', this.data.categoria);
+                formData.append('descripcion', this.data.descripcion);
+                formData.append('imagen', this.data.imagen); // archivo de imagen
+
+                axios.post('/colaborador/guardarPortafolio', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
                 }).then(res => {
                     this.overlay = false;
                     if (res.data.status === 'ok') {
-                        this.dialogoCategoriaGastos = false;
+                        this.dialogoPortafolio = false;
                         Swal.fire({
                             icon: 'success',
                             text: '¡Registro guardado exitosamente!'
                         });
                         this.getData();
-                    }
-                    else {
-                        this.dialogoCategoriaGastos = false;
+                    } else {
+                        this.dialogoPortafolio = false;
                         Swal.fire({
                             icon: 'error',
                             text: 'Ha ocurrido un error al guardar el registro. Intente de nuevo.'
                         });
                     }
-                })
+                });
             }
         },
 
-        editarCatGastos(item) {
+        editarPOrtafolio(item) {
+            console.log('item ', item);
             this.overlay = true;
             this.idItem = item.id;
-            this.data.nombre = item.nombre;
-            this.data.descripcion = item.descripcion;
-            this.titleDialogo = 'Editar Categoría - Gastos';
+            this.data.donante = item.idDonante;
+            this.data.monto = item.monto;
+            // this.data.fecha = new Date(item.fecha);
+            const [year, month, day] = item.fecha.split('-');
+            this.data.fecha = new Date(
+                parseInt(year),
+                parseInt(month) - 1, // Los meses en JS van de 0 a 11
+                parseInt(day)
+            );
+            this.data.metodoPago = item.metodoPagoId;
+            this.data.comentario = item.comentario;
+            this.titleDialogo = 'Editar Donación';
             this.banderaDialogo = 2;
-            this.dialogoCategoriaGastos = true;
+            this.dialogoPortafolio = true;
             this.overlay = false;
         },
 
-        async editarSaveCatGastos() {
-            const resul = await this.$refs.refsCatGastos.validate();
+        async editaqrSaveDonaciones() {
+            const resul = await this.$refs.refsPortafolio.validate();
 
             if (resul.valid) {
                 this.overlay = true;
-                axios.post('/colaborador/editarCatGastos', {
+                axios.post('/colaborador/editarPOrtafolio', {
                     id: this.idItem,
                     data: this.data,
                 }).then(res => {
                     this.overlay = false;
                     if (res.data.status === 'ok') {
-                        this.dialogoCategoriaGastos = false;
+                        this.dialogoPortafolio = false;
                         Swal.fire({
                             icon: 'success',
                             text: '¡Registro modificado exitosamente!'
@@ -214,7 +273,7 @@ export default {
                         this.getData();
                     }
                     else {
-                        this.dialogoCategoriaGastos = false;
+                        this.dialogoPortafolio = false;
                         Swal.fire({
                             icon: 'error',
                             text: 'Ha ocurrido un error al modificar el registro. Intente de nuevo.'
@@ -224,7 +283,7 @@ export default {
             }
         },
 
-        eliminarCatGasto(item) {
+        eliminarDonacion(item) {
             Swal.fire({
                 icon: 'warning',
                 text: '¿Esta seguro de eliminar el registro?',
@@ -232,14 +291,14 @@ export default {
                 confirmButtonText: 'Si',
                 cancelButtonText: 'No'
             }).then(result => {
-                if(result.isConfirmed) {
+                if (result.isConfirmed) {
                     this.overlay = true;
 
-                    axios.post('/colaborador/eliminarCatGasto', {
+                    axios.post('/colaborador/eliminarDonacion', {
                         id: item.id
                     }).then(res => {
                         this.overlay = false;
-                        if(res.data.status === 'ok') {
+                        if (res.data.status === 'ok') {
                             Swal.fire({
                                 icon: 'success',
                                 text: '¡Registro eliminado exitosamente!'
@@ -247,20 +306,34 @@ export default {
                         }
                         else {
                             Swal.fire({
-                            icon: 'error',
-                            text: 'Ha ocurrido un error al eliminar el registro. Intente de nuevo.'
-                        });
+                                icon: 'error',
+                                text: 'Ha ocurrido un error al eliminar el registro. Intente de nuevo.'
+                            });
                         }
                     })
                     this.getData();
                 }
             })
-        }
+        },
+        formatoFecha(fecha) {
+            if (!fecha) return null;
+            const year = fecha.getFullYear();
+            const month = String(fecha.getMonth() + 1).padStart(2, '0');
+            const day = String(fecha.getDate()).padStart(2, '0');
+            // const [year, month, day] = fecha.split('-');
+            return `${day}/${month}/${year}`;
+        },
     },
 
     mounted() {
         this.getData();
     },
+
+    computed: {
+        computedFechaDonacion() {
+            return this.formatoFecha(this.data.fecha);
+        },
+    }
 }
 </script>
 <style>

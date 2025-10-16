@@ -632,4 +632,137 @@ class SoporteController extends Controller
             return 'Error al eliminar lugar ' . $e;
         }
     }
+    public function getCategoriaPortafolio()
+    {
+        $catPortafolio = DB::table('categorias_portafolio')
+            ->where('estado', 1)
+            ->get();
+
+        return response()->json([
+            'catPortafolio' => $catPortafolio,
+        ]);
+    }
+    public function guardarCatPortafolio(Request $request)
+    {
+        try {
+            $newCatPortafolio = DB::table('categorias_portafolio')
+                ->insertGetId([
+                    'nombre' => $request->data['nombre'],
+                    'descripcion' => $request->data['descripcion'],
+                    'estado' => 1,
+                    'created_at' => $this->today->format('Y-m-d H:i:s'),
+                    'updated_at' => $this->today->format('Y-m-d H:i:s'),
+                ]);
+            return response()->json([
+                'status' => 'ok',
+                'newCatPortafolio' => $newCatPortafolio
+            ]);
+        } catch (\Exception $e) {
+            return 'Error al guardar categorias - portafolio ' . $e;
+        }
+    }
+    public function editarCatPortafolio(Request $request)
+    {
+        try {
+            DB::table('categorias_portafolio')
+                ->where('id', $request->id)
+                ->update([
+                    'nombre' => $request->data['nombre'],
+                    'descripcion' => $request->data['descripcion'],
+                    'updated_at' => $this->today->format('Y-m-d H:i:s'),
+                ]);
+
+            return response()->json([
+                'status' => 'ok',
+            ]);
+        } catch (\Exception $e) {
+            return 'Error al editar categoria - portafolio ' . $e;
+        }
+    }
+    public function eliminarCAtPortafolio(Request $request)
+    {
+        try {
+            DB::table('categorias_portafolio')
+                ->where('id', $request->id)
+                ->update([
+                    'estado' => 0,
+                    'updated_at' => $this->today->format('Y-m-d H:i:s'),
+                ]);
+
+            return response()->json([
+                'status' => 'ok',
+            ]);
+        } catch (\Exception $e) {
+            return 'Error al eliminar categoría - portafolio ' . $e;
+        }
+    }
+    public function getPortafolio()
+    {
+        $portafolio = DB::table('portafolios')
+            ->join('categorias_portafolio as cPortafolio', 'portafolios.categoria_id', '=', 'cPortafolio.id')
+            ->join('users', 'portafolios.usuario_id', '=', 'users.id')
+            ->select([
+                'portafolios.*',
+                'cPortafolio.id as idCatPortafolio',
+                'cPortafolio.nombre as categoria',
+                'users.id as idUser',
+                'users.name as nombreUsuario',
+            ])
+            ->get();
+
+        $catPortafolio = $this->getCategoriaPortafolio();
+
+        return response()->json([
+            'portafolio' => $portafolio,
+            'catPortafolio' => $catPortafolio,
+        ]);
+    }
+
+    public function guardarPortafolio(Request $request)
+    {
+        try {
+            // dd($request->file('imagen')->getMimeType());
+
+            $userLog = Auth::user();
+            // $request->validate([
+            //     'titulo' => 'required|string',
+            //     'subtitulo' => 'nullable|string',
+            //     'categoria' => 'required|integer',
+            //     'descripcion' => 'nullable|string',
+            //     'imagen' => 'required|file|max:2048',
+            // ]);
+    
+            if ($request->hasFile('imagen')) {
+                $imagen = $request->file('imagen');
+                $nombreImagen = time() . '_' . $imagen->getClientOriginalName();
+                $imagen->move(public_path('portafolio'), $nombreImagen);
+                // $ruta = $imagen->storeAs('public/portafolio', $nombreImagen); // guarda en storage/app/public/portafolio
+
+
+                // Guardar en base de datos
+                $portafolio = DB::table('portafolios')
+                    ->insertGetId([
+                        'titulo' => $request->titulo,
+                        'subtitulo' => $request->subtitulo,
+                        'categoria_id' => $request->categoria,
+                        'descripcion' => $request->descripcion,
+                        'fecha_publicacion' => $this->today->format('Y-m-d'),
+                        'imagen_url' => $nombreImagen ?? null,
+                        'usuario_id' => $userLog->id,
+                        'estado' => 1,
+                        'created_at' => $this->today->format('Y-m-d H:i:s'),
+                        'updated_at' => $this->today->format('Y-m-d H:i:s'),
+                    ]);
+        
+                return response()->json([
+                    'status' => 'ok',
+                    'portafolio' => $portafolio
+                ]);
+
+            }
+    
+        } catch (\Exception $e) {
+            return 'Error al guardar portafolio '. $e->getMessage();
+        }
+    }
 }
