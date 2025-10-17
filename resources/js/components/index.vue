@@ -7,7 +7,7 @@
 <script>
 import dashboardSoporte from './soporte/dashboardSoporte.vue';
 import Animales from './soporte/Animales.vue';
-import Capacidad from './soporte/capacidad.vue';
+import Capacidad from './soporte/Capacidad.vue';
 import Donantes from './soporte/Donantes.vue';
 import Donaciones from './soporte/Donaciones.vue';
 import Gastos from './soporte/Gastos.vue';
