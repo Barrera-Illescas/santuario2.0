@@ -71,9 +71,9 @@ export default {
   name: 'Apoyo',
   data() {
     return {
-      whatsappVoluntariado: 'https://wa.me/50212345678?text=Hola%2C%20quiero%20ser%20voluntario',
-      paypalDonacion: 'https://www.paypal.com/donate/?hosted_button_id=XXXXXXXXXXXX',
-      whatsappDonacion: 'https://wa.me/50212345678?text=Hola%2C%20quiero%20hacer%20una%20donación%20al%20santuario',
+      whatsappVoluntariado: 'https://wa.me/50256911365?text=Hola%2C%20quiero%20ser%20voluntario',
+      paypalDonacion: 'https://paypal.me/granjaDonaciones?country.x=ES&locale.x=es_ES',
+      whatsappDonacion: 'https://wa.me/50256911365?text=Hola%2C%20quiero%20hacer%20una%20donación%20al%20santuario',
     };
   },
 };

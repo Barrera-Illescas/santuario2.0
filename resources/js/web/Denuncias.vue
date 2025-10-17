@@ -43,7 +43,7 @@ export default {
   name: 'Denuncia',
   data() {
     return {
-      whatsappDenuncia: 'https://wa.me/50212345678?text=Hola%2C%20quiero%20reportar%20un%20caso%20de%20maltrato%20animal',
+      whatsappDenuncia: 'https://wa.me/50256911365?text=Hola%2C%20quiero%20reportar%20un%20caso%20de%20maltrato%20animal',
     };
   },
 };
