@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Soporte\SoporteController;
+use App\Http\Controllers\Web\WebController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 
@@ -14,6 +15,8 @@ Route::get('/', function () {
 // Login routes
 Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
 Route::post('/login', [AuthenticatedSessionController::class, 'store']);
+
+Route::get('/portafolio/listar', [WebController::class, 'listar']);
 
 // Rutas protegidas por middleware 'auth'
 Route::middleware(['auth'])->group(function () {
@@ -123,6 +126,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/getPortafolio', [SoporteController::class, 'getPortafolio']);
         //RUTA PARA GUARDAR LOS DATOS DEL PORTAFOLIO
         Route::post('/guardarPortafolio', [SoporteController::class, 'guardarPortafolio']);
+        //RUTA PARA EDITAR LOS DATOS DEL PORTAFOLIO
+        Route::post('/editarPortafolio', [SoporteController::class, 'editarPortafolio']);
+        //RUTA PARA DESHABILITAR LOS DATOS DEL PORTAFOLIO
+        Route::post('/deshabilitarPortafolio', [SoporteController::class, 'deshabilitarPortafolio']);
 
     });
 });

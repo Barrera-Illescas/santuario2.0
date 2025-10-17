@@ -36,7 +36,7 @@
                     <v-col class="col-6">
                         <v-tooltip>
                             <template v-slot:activator="{ props }">
-                                <v-icon size="x-large" class="mr-2" @click="editarPOrtafolio(item)" color="success"
+                                <v-icon size="x-large" class="mr-2" @click="editarPortafolio(item)" color="success"
                                     v-bind="props">
                                     mdi mdi-pencil
                                 </v-icon>
@@ -47,12 +47,12 @@
                     <v-col class="col-6">
                         <v-tooltip>
                             <template v-slot:activator="{ props }">
-                                <v-icon size="x-large" class="mr-2" @click="eliminarDonacion(item)" color="danger"
+                                <v-icon size="x-large" class="mr-2" @click="deshabilitarPortafolio(item)" color="danger"
                                     v-bind="props">
-                                    mdi mdi-trash-can
+                                    mdi mdi-publish-off
                                 </v-icon>
                             </template>
-                            <span>Eliminar</span>
+                            <span>Deshabilitar</span>
                         </v-tooltip>
                     </v-col>
                 </v-row>
@@ -108,7 +108,7 @@
                                 <v-icon start icon="mdi-content-save" />
                                 Guardar
                             </v-btn>
-                            <v-btn v-if="banderaDialogo == 2" color="success" @click.prevent="editaqrSaveDonaciones()"
+                            <v-btn v-if="banderaDialogo == 2" color="success" @click.prevent="editarSavePortafolio()"
                                 rounded>
                                 <v-icon start icon="mdi-content-save" />
                                 Actualizar
@@ -233,60 +233,72 @@ export default {
             }
         },
 
-        editarPOrtafolio(item) {
-            console.log('item ', item);
+        editarPortafolio(item) {
+            console.log('item', item);
             this.overlay = true;
+
             this.idItem = item.id;
-            this.data.donante = item.idDonante;
-            this.data.monto = item.monto;
-            // this.data.fecha = new Date(item.fecha);
-            const [year, month, day] = item.fecha.split('-');
-            this.data.fecha = new Date(
-                parseInt(year),
-                parseInt(month) - 1, // Los meses en JS van de 0 a 11
-                parseInt(day)
-            );
-            this.data.metodoPago = item.metodoPagoId;
-            this.data.comentario = item.comentario;
-            this.titleDialogo = 'Editar Donación';
+            this.data.titulo = item.titulo;
+            this.data.subtitulo = item.subtitulo;
+            this.data.descripcion = item.descripcion;
+            this.data.categoria = item.categoria_id;
+            this.data.imagen = null;
+
+            this.titleDialogo = 'Editar Portafolio';
             this.banderaDialogo = 2;
             this.dialogoPortafolio = true;
             this.overlay = false;
         },
-
-        async editaqrSaveDonaciones() {
+        async editarSavePortafolio() {
             const resul = await this.$refs.refsPortafolio.validate();
 
             if (resul.valid) {
                 this.overlay = true;
-                axios.post('/colaborador/editarPOrtafolio', {
-                    id: this.idItem,
-                    data: this.data,
-                }).then(res => {
-                    this.overlay = false;
-                    if (res.data.status === 'ok') {
-                        this.dialogoPortafolio = false;
-                        Swal.fire({
-                            icon: 'success',
-                            text: '¡Registro modificado exitosamente!'
-                        });
-                        this.getData();
-                    }
-                    else {
-                        this.dialogoPortafolio = false;
+
+                const formData = new FormData();
+                formData.append('id', this.idItem);
+                formData.append('titulo', this.data.titulo);
+                formData.append('subtitulo', this.data.subtitulo);
+                formData.append('descripcion', this.data.descripcion);
+                formData.append('categoria', this.data.categoria);
+
+                // Solo enviar imagen si se ha cargado una nueva
+                if (this.data.imagen) {
+                    formData.append('imagen', this.data.imagen);
+                }
+
+                axios.post('/colaborador/editarPortafolio', formData)
+                    .then(res => {
+                        this.overlay = false;
+                        if (res.data.status === 'ok') {
+                            this.dialogoPortafolio = false;
+                            Swal.fire({
+                                icon: 'success',
+                                text: '¡Registro modificado exitosamente!'
+                            });
+                            this.getData();
+                        } else {
+                            this.dialogoPortafolio = false;
+                            Swal.fire({
+                                icon: 'error',
+                                text: 'Ha ocurrido un error al modificar el registro. Intente de nuevo.'
+                            });
+                        }
+                    })
+                    .catch(() => {
+                        this.overlay = false;
                         Swal.fire({
                             icon: 'error',
-                            text: 'Ha ocurrido un error al modificar el registro. Intente de nuevo.'
+                            text: 'Error de conexión al modificar el registro.'
                         });
-                    }
-                })
+                    });
             }
         },
 
-        eliminarDonacion(item) {
+        deshabilitarPortafolio(item) {
             Swal.fire({
                 icon: 'warning',
-                text: '¿Esta seguro de eliminar el registro?',
+                text: '¿Esta seguro de deshabilitar el registro?',
                 showCancelButton: true,
                 confirmButtonText: 'Si',
                 cancelButtonText: 'No'
@@ -294,20 +306,20 @@ export default {
                 if (result.isConfirmed) {
                     this.overlay = true;
 
-                    axios.post('/colaborador/eliminarDonacion', {
+                    axios.post('/colaborador/deshabilitarPortafolio', {
                         id: item.id
                     }).then(res => {
                         this.overlay = false;
                         if (res.data.status === 'ok') {
                             Swal.fire({
                                 icon: 'success',
-                                text: '¡Registro eliminado exitosamente!'
+                                text: '¡Registro deshabilitado exitosamente!'
                             })
                         }
                         else {
                             Swal.fire({
                                 icon: 'error',
-                                text: 'Ha ocurrido un error al eliminar el registro. Intente de nuevo.'
+                                text: 'Ha ocurrido un error al deshabilitar el registro. Intente de nuevo.'
                             });
                         }
                     })

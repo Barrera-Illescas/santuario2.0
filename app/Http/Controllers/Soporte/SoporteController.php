@@ -721,17 +721,8 @@ class SoporteController extends Controller
     public function guardarPortafolio(Request $request)
     {
         try {
-            // dd($request->file('imagen')->getMimeType());
-
             $userLog = Auth::user();
-            // $request->validate([
-            //     'titulo' => 'required|string',
-            //     'subtitulo' => 'nullable|string',
-            //     'categoria' => 'required|integer',
-            //     'descripcion' => 'nullable|string',
-            //     'imagen' => 'required|file|max:2048',
-            // ]);
-    
+
             if ($request->hasFile('imagen')) {
                 $imagen = $request->file('imagen');
                 $nombreImagen = time() . '_' . $imagen->getClientOriginalName();
@@ -753,16 +744,70 @@ class SoporteController extends Controller
                         'created_at' => $this->today->format('Y-m-d H:i:s'),
                         'updated_at' => $this->today->format('Y-m-d H:i:s'),
                     ]);
-        
+
                 return response()->json([
                     'status' => 'ok',
                     'portafolio' => $portafolio
                 ]);
-
             }
-    
         } catch (\Exception $e) {
-            return 'Error al guardar portafolio '. $e->getMessage();
+            return 'Error al guardar portafolio ' . $e->getMessage();
+        }
+    }
+    public function editarPortafolio(Request $request)
+    {
+        try {
+            $userLog = Auth::user();
+            $portafolioId = $request->id;
+
+            // Datos base para actualizar
+            $updateData = [
+                'titulo' => $request->titulo,
+                'subtitulo' => $request->subtitulo,
+                'categoria_id' => $request->categoria,
+                'descripcion' => $request->descripcion,
+                'usuario_id' => $userLog->id,
+                'updated_at' => $this->today->format('Y-m-d H:i:s'),
+            ];
+
+            // Si se envía una imagen válida, procesarla y agregarla al update
+            if ($request->hasFile('imagen') && $request->file('imagen')->isValid()) {
+                $imagen = $request->file('imagen');
+                $nombreImagen = time() . '_' . $imagen->getClientOriginalName();
+                $imagen->move(public_path('portafolio'), $nombreImagen);
+                $updateData['imagen_url'] = $nombreImagen;
+            }
+
+            // Ejecutar el update
+            DB::table('portafolios')
+                ->where('id', $portafolioId)
+                ->update($updateData);
+
+            return response()->json([
+                'status' => 'ok',
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Error al editar portafolio: ' . $e->getMessage()
+            ]);
+        }
+    }
+    public function deshabilitarPortafolio(Request $request)
+    {
+        try {
+            DB::table('portafolios')
+                ->where('id', $request->id)
+                ->update([
+                    'estado' => 0,
+                    'updated_at' => $this->today->format('Y-m-d H:i:s'),
+                ]);
+
+            return response()->json([
+                'status' => 'ok',
+            ]);
+        } catch (\Exception $e) {
+            return 'Error al deshabilitar categoría - portafolio ' . $e;
         }
     }
 }

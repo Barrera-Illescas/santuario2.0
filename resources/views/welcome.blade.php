@@ -21,30 +21,59 @@
 
 </head>
 
-<body >
+<body>
     <div id="app">
 
     </div>
-     @vite('resources/js/app.js')
-     @vite('resources/js/app1.js')
+    @vite('resources/js/app.js')
+    @vite('resources/js/app1.js')
     <!-- Masthead-->
-    
 
-    
-    
+
+
+
     <!-- Footer-->
     <footer class="footer py-4">
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-4 text-lg-start">Copyright &copy; DesDev 2025</div>
-                <div class="col-lg-4 my-3 my-lg-0">
-                    {{-- <a class="btn btn-dark btn-social mx-2" href="#!" aria-label="X"><i
-                            class="fab fa-twitter"></i></a> --}}
-                    <a class="btn btn-primary btn-social mx-2" href="#" aria-label="Facebook"><i
-                            class="fab fa-facebook-f"></i></a>
-                    <a class="btn btn-light btn-social mx-2" href="#!" aria-label="LinkedIn"><i
-                            class="fab text-primary fa-linkedin-in"></i></a>
+                <div class="col-lg-4 my-3 my-lg-0 text-center">
+                    <!-- Facebook -->
+                    <a
+                        class="btn btn-primary btn-social mx-2"
+                        href="https://www.facebook.com/Santuariogt/?locale=es_LA"
+                        target="_blank"
+                        aria-label="Facebook">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+
+                    <!-- Instagram -->
+                    <a
+                        class="btn btn-danger btn-social mx-2"
+                        href="https://www.instagram.com/granjalosfernandos"
+                        target="_blank"
+                        aria-label="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+
+                    <!-- TikTok -->
+                    <a
+                        class="btn btn-dark btn-social mx-2"
+                        href="https://www.tiktok.com/@granjalosfernandos360"
+                        target="_blank"
+                        aria-label="TikTok">
+                        <i class="fab fa-tiktok"></i>
+                    </a>
+
+                    <!-- Email -->
+                    <a
+                        class="btn btn-outline-secondary btn-social mx-2"
+                        href="mailto:granjalosfernando54@gmail.com"
+                        aria-label="Correo electrónico">
+                        <i class="fas fa-envelope"></i>
+                    </a>
                 </div>
+
                 <div class="col-lg-4 text-lg-end">
                     {{-- <a class="link-dark text-decoration-none me-3" href="#!">Privacy Policy</a>
                     <a class="link-dark text-decoration-none" href="#!">Terms of Use</a> --}}
@@ -53,7 +82,7 @@
         </div>
     </footer>
     <!-- Portfolio Modals-->
-    
+
 
     <!-- Bootstrap core JS-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -64,7 +93,7 @@
     <!-- * *                               SB Forms JS                               * *-->
     <!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
     <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
-    <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+    <!-- <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script> -->
 </body>
 
 </html>

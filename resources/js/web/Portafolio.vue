@@ -11,8 +11,7 @@
         <div
           v-for="(item, index) in portfolioItems"
           :key="index"
-          class="col-lg-4 col-sm-6 mb-4 d-flex"
-        >
+          class="col-lg-4 col-sm-6 mb-4 d-flex">
           <div class="portfolio-item w-100">
             <a class="portfolio-link" @click.prevent="openModal(item)">
               <div class="portfolio-hover">
@@ -67,44 +66,7 @@ export default {
   data() {
     return {
       activeItem: null,
-      portfolioItems: [
-        {
-          title: 'Viruta o Aserrín',
-          subtitle: 'Donaciones que ayudan a mantener limpios los dormitorios de nuestros animales.',
-          description: 'Cada semana necesitamos al menos 15 costales de viruta para evitar la mosca y mantener la higiene. ¡Tu ayuda hace la diferencia!',
-          image: 'assets/img/portfolio/viruta.jpg',
-        },
-        {
-          title: 'Desayunos solidarios',
-          subtitle: 'Ven a desayunar y apoya la alimentación de más de 300 animales rescatados.',
-          description: 'Servimos desayunos todos los domingos de 8:00 a 12:00 en Granja Los Fernandos, Km. 28.5 Interamericana. ¡Tu visita alimenta vidas!',
-          image: 'assets/img/portfolio/luna.jpg',
-        },
-        {
-          title: 'Atención veterinaria',
-          subtitle: 'Ayuda urgente para cubrir la cuenta médica de Angelito.',
-          description: 'Necesitamos reunir Q1,300 para su tratamiento. Puedes donar a la cuenta 07 20 725 de Industrial a nombre de Fernando Rendón. WhatsApp: 5691-1365.',
-          image: 'assets/img/portfolio/atencionVeterinaria.jpg',
-        },
-        {
-          title: '¡Residentes felices!',
-          subtitle: 'Max y sus amigos disfrutan su nuevo espacio ampliado.',
-          description: 'Gracias a tu apoyo, nuestros residentes tienen un hogar más grande, seguro y lleno de amor.',
-          image: 'assets/img/portfolio/nuevoEspacio.jpg',
-        },
-        {
-          title: 'La fuerza de Alma',
-          subtitle: 'Una caballita que venció la enfermedad y nos inspira cada día.',
-          description: 'Alma llegó débil, pero con cuidados y cariño superó todo. Hoy es símbolo de esperanza en el santuario.',
-          image: 'assets/img/portfolio/caballos.jpg',
-        },
-        {
-          title: 'Pequeños milagros',
-          subtitle: 'El nacimiento de patitos en libertad nos recuerda que la vida florece donde hay paz.',
-          description: 'Cada nuevo nacimiento en el santuario es una celebración de la vida y la protección que brindamos.',
-          image: 'assets/img/portfolio/patitos.jpg',
-        },
-      ],
+      portfolioItems: [],
     };
   },
   methods: {
@@ -113,6 +75,18 @@ export default {
       const modal = new bootstrap.Modal(this.$refs.portfolioModal);
       modal.show();
     },
+    getPortfolioItems() {
+      axios.get('/portafolio/listar')
+        .then(response => {
+          this.portfolioItems = response.data;
+        })
+        .catch(error => {
+          console.error('Error al cargar portafolio:', error);
+        });
+    }
+  },
+  mounted() {
+    this.getPortfolioItems();
   },
 };
 </script>
